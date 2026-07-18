@@ -5,7 +5,7 @@ Metrics: **PLR** = Path Length Ratio (lower ↓), **SD** = Safety Distance (high
 
 ## Map: `cec2024_s01` (simple, 10×10)
 
-![cec2024_s01](figures/cec2024_s01.png)
+![cec2024_s01](figures\cec2024_s01.png)
 
 ### cec2024_s01
 
@@ -14,13 +14,13 @@ Metrics: **PLR** = Path Length Ratio (lower ↓), **SD** = Safety Distance (high
 | astar | ✅ | 1.000 | 1.00 | 0.00 | 9.9 |
 | theta_star | ✅ | 1.000 | 3.00 | 0.00 | 9.9 |
 | apf_refined | ✅ | 1.082 | 1.00 | 3.00 | 10.7 |
-| random_selector | ✅ | 1.082 | 1.00 | 3.00 | 10.7 |
+| random_selector | ✅ | 1.000 | 1.00 | 0.00 | 9.9 |
 | rule_based_selector | ✅ | 1.000 | 1.00 | 0.00 | 9.9 |
 | oracle_selector | ✅ | 1.000 | 1.00 | 0.00 | 9.9 |
 
 ## Map: `cec2024_m01` (medium, 20×20)
 
-![cec2024_m01](figures/cec2024_m01.png)
+![cec2024_m01](figures\cec2024_m01.png)
 
 ### cec2024_m01
 
@@ -35,7 +35,7 @@ Metrics: **PLR** = Path Length Ratio (lower ↓), **SD** = Safety Distance (high
 
 ## Map: `cec2024_c01` (complex, 30×30)
 
-![cec2024_c01](figures/cec2024_c01.png)
+![cec2024_c01](figures\cec2024_c01.png)
 
 ### cec2024_c01
 
@@ -44,6 +44,6 @@ Metrics: **PLR** = Path Length Ratio (lower ↓), **SD** = Safety Distance (high
 | astar | ✅ | 1.061 | 1.00 | 9.42 | 40.5 |
 | theta_star | ✅ | 1.015 | 1.00 | 1.80 | 38.8 |
 | apf_refined | ❌ | — | — | — | — |
-| random_selector | ✅ | 1.061 | 1.00 | 9.42 | 40.5 |
+| random_selector | ❌ | — | — | — | — |
 | rule_based_selector | ✅ | 1.015 | 1.00 | 1.80 | 38.8 |
 | oracle_selector | ✅ | 1.015 | 1.00 | 1.80 | 38.8 |

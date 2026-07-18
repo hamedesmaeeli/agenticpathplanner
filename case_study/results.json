@@ -22,11 +22,11 @@
       "path_length": 10.7148
     },
     "random_selector": {
-      "plr": 1.0824,
+      "plr": 1.0,
       "sd": 1.0,
-      "sm": 2.9997,
+      "sm": 0.0,
       "valid": true,
-      "path_length": 10.7148
+      "path_length": 9.8995
     },
     "rule_based_selector": {
       "plr": 1.0,
@@ -110,11 +110,11 @@
       "path_length": 44.6023
     },
     "random_selector": {
-      "plr": 1.0614,
+      "plr": 1.1681,
       "sd": 1.0,
-      "sm": 9.4248,
-      "valid": true,
-      "path_length": 40.5269
+      "sm": 13.7044,
+      "valid": false,
+      "path_length": 44.6023
     },
     "rule_based_selector": {
       "plr": 1.0153,

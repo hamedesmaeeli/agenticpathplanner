@@ -209,5 +209,5 @@ def save_report(
         ]
 
     output_md.parent.mkdir(parents=True, exist_ok=True)
-    output_md.write_text("\n".join(lines))
+    output_md.write_text("\n".join(lines), encoding='utf-8')
     print(f"Report saved → {output_md}")

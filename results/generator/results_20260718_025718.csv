@@ -1,0 +1,7 @@
+sr,plr_mean,plr_std,sd_mean,sm_mean,map_id,difficulty,planner
+1.0,1.0,0.0,1.0,0.0,cec2024_s01,simple,astar
+1.0,1.1218,0.0,1.0,4.7124,cec2024_m01,medium,astar
+1.0,1.0614,0.0,1.0,9.4248,cec2024_c01,complex,astar
+0.8,1.0,0.0,1.0,0.0,cec2024_s01,simple,llm_generate_algorithm
+1.0,1.3857,0.0,1.0,3.927,cec2024_m01,medium,llm_generate_algorithm
+1.0,1.2799,0.0,1.0,19.635,cec2024_c01,complex,llm_generate_algorithm

@@ -1,0 +1,66 @@
+{
+  "astar": {
+    "cec2024_s01": {
+      "sr": 1.0,
+      "plr_mean": 1.0,
+      "plr_std": 0.0,
+      "sd_mean": 1.0,
+      "sm_mean": 0.0,
+      "map_id": "cec2024_s01",
+      "difficulty": "simple",
+      "planner": "astar"
+    },
+    "cec2024_m01": {
+      "sr": 1.0,
+      "plr_mean": 1.1218,
+      "plr_std": 0.0,
+      "sd_mean": 1.0,
+      "sm_mean": 4.7124,
+      "map_id": "cec2024_m01",
+      "difficulty": "medium",
+      "planner": "astar"
+    },
+    "cec2024_c01": {
+      "sr": 1.0,
+      "plr_mean": 1.0614,
+      "plr_std": 0.0,
+      "sd_mean": 1.0,
+      "sm_mean": 9.4248,
+      "map_id": "cec2024_c01",
+      "difficulty": "complex",
+      "planner": "astar"
+    }
+  },
+  "llm_generate_algorithm": {
+    "cec2024_s01": {
+      "sr": 0.8,
+      "plr_mean": 1.0,
+      "plr_std": 0.0,
+      "sd_mean": 1.0,
+      "sm_mean": 0.0,
+      "map_id": "cec2024_s01",
+      "difficulty": "simple",
+      "planner": "llm_generate_algorithm"
+    },
+    "cec2024_m01": {
+      "sr": 1.0,
+      "plr_mean": 1.3857,
+      "plr_std": 0.0,
+      "sd_mean": 1.0,
+      "sm_mean": 3.927,
+      "map_id": "cec2024_m01",
+      "difficulty": "medium",
+      "planner": "llm_generate_algorithm"
+    },
+    "cec2024_c01": {
+      "sr": 1.0,
+      "plr_mean": 1.2799,
+      "plr_std": 0.0,
+      "sd_mean": 1.0,
+      "sm_mean": 19.635,
+      "map_id": "cec2024_c01",
+      "difficulty": "complex",
+      "planner": "llm_generate_algorithm"
+    }
+  }
+}

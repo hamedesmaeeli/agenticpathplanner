@@ -1,0 +1,72 @@
+# Idea 1 — Refiner experiment configuration
+#
+# The Refiner runs A* first to obtain a geometrically valid baseline path,
+# then asks the LLM to refine it using semantic environmental context
+# (wind, interference zones, safety margins, structural hazards).
+# The refined path is validated for collision-freedom in the reflect step.
+#
+# Reference: docs/research_positioning.md §10.2 (Refiner)
+
+# ---------------------------------------------------------------------------
+# LLM settings — spatial reasoning and instruction following
+# ---------------------------------------------------------------------------
+
+# Primary recommendation (8 GB VRAM):
+model: llama3.1:8b
+# Alternatives:
+#   model: qwen2.5:7b      # good structured output
+#   model: mistral:7b      # lightweight, high format compliance
+#   model: phi3.5:3.8b     # CPU-friendly fallback
+
+mode: generate_path
+
+# Moderate temperature: allows creative alternative route exploration
+temperature: 0.4
+top_p: 0.9
+max_tokens: 1024
+
+# ---------------------------------------------------------------------------
+# Benchmark settings
+# ---------------------------------------------------------------------------
+
+runs_per_map: 5
+
+maps:
+  - cec2024_s01
+  - cec2024_m01
+  - cec2024_c01
+
+include_grid_in_prompt: true
+
+output_dir: results/refiner
+
+# ---------------------------------------------------------------------------
+# Environmental context scenarios injected into the Refiner prompt
+# Mirrors real UAV operational conditions used in the CEC2024 benchmark
+# ---------------------------------------------------------------------------
+
+environments:
+  low_risk:
+    wind_speed: "5 knots from North"
+    interference_zones: []
+    safety_margin_m: 2
+  medium_risk:
+    wind_speed: "12 knots from North-West"
+    interference_zones:
+      - description: "power lines at grid centre"
+        radius_cells: 2
+    safety_margin_m: 5
+  high_risk:
+    wind_speed: "20 knots gusting from West"
+    interference_zones:
+      - description: "high-voltage transmission tower"
+        radius_cells: 3
+      - description: "active radar installation"
+        radius_cells: 2
+    safety_margin_m: 10
+
+# Baselines to compare against (added to the same evaluation run)
+baselines:
+  - astar          # raw unrefined path — lower bound
+  - theta_star     # geometric smoothing baseline
+  - apf_refined    # APF post-processing baseline

@@ -1,0 +1,134 @@
+{
+  "cec2024_s01": {
+    "astar": {
+      "plr": 1.0,
+      "sd": 1.0,
+      "sm": 0.0,
+      "valid": true,
+      "path_length": 9.8995
+    },
+    "theta_star": {
+      "plr": 1.0,
+      "sd": 3.0,
+      "sm": 0.0,
+      "valid": true,
+      "path_length": 9.8995
+    },
+    "apf_refined": {
+      "plr": 1.0824,
+      "sd": 1.0,
+      "sm": 2.9997,
+      "valid": true,
+      "path_length": 10.7148
+    },
+    "random_selector": {
+      "plr": 1.0824,
+      "sd": 1.0,
+      "sm": 2.9997,
+      "valid": true,
+      "path_length": 10.7148
+    },
+    "rule_based_selector": {
+      "plr": 1.0,
+      "sd": 1.0,
+      "sm": 0.0,
+      "valid": true,
+      "path_length": 9.8995
+    },
+    "oracle_selector": {
+      "plr": 1.0,
+      "sd": 1.0,
+      "sm": 0.0,
+      "valid": true,
+      "path_length": 9.8995
+    }
+  },
+  "cec2024_m01": {
+    "astar": {
+      "plr": 1.1218,
+      "sd": 1.0,
+      "sm": 4.7124,
+      "valid": true,
+      "path_length": 26.9706
+    },
+    "theta_star": {
+      "plr": 1.0799,
+      "sd": 1.0,
+      "sm": 2.0854,
+      "valid": true,
+      "path_length": 25.9635
+    },
+    "apf_refined": {
+      "plr": 1.3446,
+      "sd": 2.0,
+      "sm": 12.9612,
+      "valid": true,
+      "path_length": 32.3269
+    },
+    "random_selector": {
+      "plr": 1.1218,
+      "sd": 1.0,
+      "sm": 4.7124,
+      "valid": true,
+      "path_length": 26.9706
+    },
+    "rule_based_selector": {
+      "plr": 1.1218,
+      "sd": 1.0,
+      "sm": 4.7124,
+      "valid": true,
+      "path_length": 26.9706
+    },
+    "oracle_selector": {
+      "plr": 1.0799,
+      "sd": 1.0,
+      "sm": 2.0854,
+      "valid": true,
+      "path_length": 25.9635
+    }
+  },
+  "cec2024_c01": {
+    "astar": {
+      "plr": 1.0614,
+      "sd": 1.0,
+      "sm": 9.4248,
+      "valid": true,
+      "path_length": 40.5269
+    },
+    "theta_star": {
+      "plr": 1.0153,
+      "sd": 1.0,
+      "sm": 1.8025,
+      "valid": true,
+      "path_length": 38.7691
+    },
+    "apf_refined": {
+      "plr": 1.1681,
+      "sd": 1.0,
+      "sm": 13.7044,
+      "valid": false,
+      "path_length": 44.6023
+    },
+    "random_selector": {
+      "plr": 1.0614,
+      "sd": 1.0,
+      "sm": 9.4248,
+      "valid": true,
+      "path_length": 40.5269
+    },
+    "rule_based_selector": {
+      "plr": 1.0153,
+      "sd": 1.0,
+      "sm": 1.8025,
+      "valid": true,
+      "path_length": 38.7691
+    },
+    "oracle_selector": {
+      "plr": 1.0153,
+      "sd": 1.0,
+      "sm": 1.8025,
+      "valid": true,
+      "path_length": 38.7691
+    }
+  }
+}

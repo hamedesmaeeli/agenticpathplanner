@@ -1,0 +1,87 @@
+# Idea 3 — Selector experiment configuration
+#
+# The Selector reads real-time environmental conditions and uses the LLM
+# to reason over a registry of available algorithms, selecting the most
+# appropriate one and producing a one-sentence justification.
+#
+# Reference: docs/research_positioning.md §10.2 (Selector)
+
+# ---------------------------------------------------------------------------
+# LLM settings — structured output and algorithmic reasoning
+# ---------------------------------------------------------------------------
+
+# Primary recommendation (8 GB VRAM):
+model: llama3.1:8b
+# Alternatives:
+#   model: mistral:7b     # highest format compliance, lowest hallucination rate
+#   model: qwen2.5:7b     # good natural-language condition reasoning
+#   model: phi3:14b       # strong algorithm trade-off reasoning (14 GB VRAM)
+#   model: phi3.5:3.8b    # CPU-friendly fallback
+
+mode: generate_path   # selector does not generate path code; LLM outputs selection only
+
+# Low temperature: deterministic structured output (Selected: / Reasoning:)
+temperature: 0.1
+top_p: 0.9
+max_tokens: 256
+
+# ---------------------------------------------------------------------------
+# Benchmark settings
+# ---------------------------------------------------------------------------
+
+runs_per_map: 5
+
+maps:
+  - cec2024_s01
+  - cec2024_m01
+  - cec2024_c01
+
+include_grid_in_prompt: false   # selector uses condition descriptions, not grid ASCII
+
+output_dir: results/selector
+
+# ---------------------------------------------------------------------------
+# Algorithm registry — algorithms available to the Selector
+# Each entry maps to a BasePlanner in agenticpathplanner.classical
+# ---------------------------------------------------------------------------
+
+registry:
+  astar:
+    description: "Classic A* graph search — optimal path length, deterministic, fast on small grids"
+  rrt_star:
+    description: "Asymptotically optimal sampling-based planner — strong on cluttered/complex maps"
+  apf:
+    description: "Artificial Potential Field — reactive real-time avoidance, best for dense dynamic obstacles"
+  theta_star:
+    description: "Any-angle A* — produces smoother paths than A* with minimal overhead"
+
+# ---------------------------------------------------------------------------
+# Environmental condition scenarios for Selector evaluation
+# ---------------------------------------------------------------------------
+
+conditions:
+  open_low_density:
+    obstacle_density: low
+    map_size: small
+    urgency: low
+    target_moving: false
+  cluttered_medium:
+    obstacle_density: medium
+    map_size: medium
+    urgency: medium
+    target_moving: false
+  dense_high_urgency:
+    obstacle_density: high
+    map_size: large
+    urgency: high
+    target_moving: true
+
+# ---------------------------------------------------------------------------
+# Baseline selectors to compare against LLM Selector
+# ---------------------------------------------------------------------------
+
+baselines:
+  - always_astar       # fixed single-algorithm (Already in repo)
+  - random_selector    # uniform random choice — floor baseline
+  - rule_based         # expert if/else conditions — human expert comparison
+  - oracle             # post-hoc best algorithm — ceiling baseline

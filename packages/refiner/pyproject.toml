@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agenticpathplanner-refiner"
+version = "0.1.0"
+description = "Idea 1 — LLM refines a classical path using semantic/environmental context"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Faramarz Safiesfahani" }]
+dependencies = [
+    "agenticpathplanner-core>=0.1.0",
+    "agenticpathplanner-llm>=0.1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"

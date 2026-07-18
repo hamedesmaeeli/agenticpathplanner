@@ -1,0 +1,58 @@
+# Idea 2 — Generator experiment configuration
+#
+# The Generator asks the LLM to write a complete Python plan(grid,start,goal)
+# function tailored to the mission description, then executes it and evaluates
+# the resulting path against CEC2024 metrics.
+#
+# Reference: docs/research_positioning.md §10.2 (Generator)
+
+# ---------------------------------------------------------------------------
+# LLM settings — code generation requires a code-focused model
+# ---------------------------------------------------------------------------
+
+# Primary recommendation (8 GB+ VRAM):
+model: qwen2.5-coder:7b
+# Alternatives:
+#   model: qwen2.5-coder:14b      # highest quality (24 GB+ VRAM)
+#   model: deepseek-coder-v2:16b  # strong algorithmic reasoning (16 GB+ VRAM)
+#   model: codellama:13b          # reliable fallback
+#   model: qwen2.5-coder:3b       # CPU-friendly, lower quality
+
+mode: generate_algorithm
+
+# Low temperature: deterministic, syntactically valid Python code
+temperature: 0.1
+top_p: 0.9
+max_tokens: 2048
+
+# ---------------------------------------------------------------------------
+# Benchmark settings
+# ---------------------------------------------------------------------------
+
+runs_per_map: 5
+
+maps:
+  - cec2024_s01
+  - cec2024_m01
+  - cec2024_c01
+
+include_grid_in_prompt: true
+
+output_dir: results/generator
+
+# ---------------------------------------------------------------------------
+# Mission descriptions per map difficulty
+# Used by GeneratorAgent as context.mission
+# ---------------------------------------------------------------------------
+
+missions:
+  simple: >
+    Navigate from start to goal in a small open environment with sparse obstacles.
+    Prioritise shortest path length while maintaining safe clearance from walls.
+  medium: >
+    Navigate a corridor-maze environment. The UAV has moderate battery.
+    Balance path length and obstacle clearance. Avoid tight corners.
+  complex: >
+    Navigate a dense, cluttered environment under time pressure.
+    Prioritise finding any valid path quickly. Safety margins can be reduced
+    if needed to ensure task completion within the battery budget.

@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agenticpathplanner-evaluation"
+version = "0.1.0"
+description = "Experiment runner and reporting for Agentic Path Planner"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Faramarz Safiesfahani" }]
+dependencies = [
+    "agenticpathplanner-core>=0.1.0",
+    "agenticpathplanner-benchmarks>=0.1.0",
+    "rich>=13.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+agentpp = "agenticpathplanner.evaluation.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"

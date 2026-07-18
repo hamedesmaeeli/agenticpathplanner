@@ -1,0 +1,49 @@
+# CEC2024 Path Planning Benchmark — general experiment configuration
+#
+# This is the baseline config used by experiments/run_cec2024.py.
+# For idea-specific runs use: generator.yaml, refiner.yaml, selector.yaml
+# For per-hardware-tier model choices see: models.yaml
+
+# ---------------------------------------------------------------------------
+# LLM settings
+# ---------------------------------------------------------------------------
+
+# Ollama model — recommended per subproject:
+#   Generator : qwen2.5-coder:7b   (code generation)
+#   Refiner   : llama3.1:8b        (spatial reasoning)
+#   Selector  : mistral:7b         (structured output)
+model: llama3.1:8b
+
+# Planning mode:
+#   generate_path       — LLM outputs (row,col) waypoints directly  [Refiner / baseline]
+#   generate_algorithm  — LLM writes a Python plan(grid,start,goal) function  [Generator]
+mode: generate_path
+
+# Temperature — controls LLM randomness:
+#   Generator / Selector : 0.1 – 0.2  (deterministic code / structured output)
+#   Refiner              : 0.3 – 0.5  (creative route exploration)
+temperature: 0.2
+
+top_p: 0.9
+max_tokens: 2048
+
+# ---------------------------------------------------------------------------
+# Benchmark settings
+# ---------------------------------------------------------------------------
+
+# Number of independent LLM calls per map (for success rate computation)
+# Minimum 5 runs recommended to account for LLM stochasticity
+runs_per_map: 5
+
+# Map IDs to evaluate. Leave empty to run all available maps.
+# Built-in: cec2024_s01 (simple 10x10), cec2024_m01 (medium 20x20), cec2024_c01 (complex 30x30)
+maps:
+  - cec2024_s01
+  - cec2024_m01
+  - cec2024_c01
+
+# Include ASCII grid in LLM prompt (disable for maps larger than 30x30)
+include_grid_in_prompt: true
+
+# Output directory for CSV and JSON result files
+output_dir: results

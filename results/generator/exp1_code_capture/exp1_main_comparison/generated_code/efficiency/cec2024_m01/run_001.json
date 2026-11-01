@@ -1,0 +1,19 @@
+{
+  "experiment": "exp1",
+  "method": "generator",
+  "map_id": "cec2024_m01",
+  "difficulty": "medium",
+  "mission_type": "efficiency",
+  "mission": "Navigate a corridor maze quickly. Time is critical. Find the shortest valid path. Do not sacrifice length for clearance.",
+  "run_index": 0,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "elapsed_s": 193.1129634000008,
+  "agent_success": false,
+  "path_valid": false,
+  "plr": null,
+  "sd": null,
+  "sm": null,
+  "path_length": 0.0,
+  "code_file": "results\\generator\\exp1_code_capture\\exp1_main_comparison\\generated_code\\efficiency\\cec2024_m01\\run_001.py"
+}

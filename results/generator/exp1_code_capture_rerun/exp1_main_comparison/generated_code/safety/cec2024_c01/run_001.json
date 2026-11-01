@@ -1,0 +1,19 @@
+{
+  "experiment": "exp1",
+  "method": "generator",
+  "map_id": "cec2024_c01",
+  "difficulty": "complex",
+  "mission_type": "safety",
+  "mission": "Navigate a dense cluttered environment with extreme caution. Maximise the minimum distance to any obstacle at every waypoint.",
+  "run_index": 0,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "elapsed_s": 156.8003353000022,
+  "agent_success": true,
+  "path_valid": true,
+  "plr": 1.0613649722034213,
+  "sd": 1.0,
+  "sm": 10.995574603665638,
+  "path_length": 40.526911934581186,
+  "code_file": "results\\generator\\exp1_code_capture_rerun\\exp1_main_comparison\\generated_code\\safety\\cec2024_c01\\run_001.py"
+}

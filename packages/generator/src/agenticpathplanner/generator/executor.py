@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import textwrap
 
 import numpy as np
@@ -15,9 +16,31 @@ log = logging.getLogger(__name__)
 class CodeExecutor:
     """Executes LLM-generated `plan(grid, start, goal)` code in a restricted namespace."""
 
+    @staticmethod
+    def extract_code(response: str) -> str:
+        """Extract a complete Markdown-fenced Python block when the LLM wraps its code.
+
+        Plain Python responses are returned unchanged (apart from surrounding
+        whitespace/BOM). If a response starts with a fence but has no matching
+        closing fence, it is left intact so the normal compiler error remains
+        visible rather than silently accepting a truncated response.
+        """
+        response = response.lstrip("\ufeff").strip()
+        if not response.startswith("```"):
+            return response
+
+        match = re.fullmatch(
+            r"```(?:python|py)?[ \t]*\r?\n(.*?)\r?\n```[ \t]*",
+            response,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        if match:
+            return textwrap.dedent(match.group(1)).strip()
+        return response
+
     def execute(self, code: str, instance: MapInstance) -> tuple[Path, str | None]:
-        """Run the generated code and return (path, generated_code_string)."""
-        code = code.strip()
+        """Run generated code and return (path, executable_code_string)."""
+        code = self.extract_code(code)
         if not code:
             return [], None
 

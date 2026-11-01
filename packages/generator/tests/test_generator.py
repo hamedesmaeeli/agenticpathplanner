@@ -37,6 +37,23 @@ class TestCodeExecutor:
         assert path == [inst.start, inst.goal]
         assert stored is not None
 
+    def test_markdown_fenced_python_code_returns_path(self):
+        inst = BUILTIN_MAPS["cec2024_s01"]
+        response = "```python\ndef plan(grid, start, goal):\n    return [start, goal]\n```"
+        path, stored = CodeExecutor().execute(response, inst)
+        assert path == [inst.start, inst.goal]
+        assert stored is not None
+        assert stored.startswith("def plan(")
+        assert "```" not in stored
+
+    def test_plain_python_code_is_preserved(self):
+        code = "def plan(grid, start, goal):\n    return [start, goal]"
+        assert CodeExecutor.extract_code(code) == code
+
+    def test_unclosed_markdown_fence_is_not_silently_trimmed(self):
+        response = "```python\ndef plan(grid, start, goal):\n    return [start, goal]"
+        assert CodeExecutor.extract_code(response) == response
+
     def test_invalid_code_returns_empty(self):
         inst = BUILTIN_MAPS["cec2024_s01"]
         path, stored = CodeExecutor().execute("this is not python!!!", inst)

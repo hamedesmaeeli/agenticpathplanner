@@ -1,0 +1,19 @@
+{
+  "experiment": "exp1",
+  "method": "generator",
+  "map_id": "cec2024_s01",
+  "difficulty": "simple",
+  "mission_type": "smoothness",
+  "mission": "Generate a smooth path with minimal direction changes. The vehicle cannot turn sharply. Prefer wide arcs over tight corners.",
+  "run_index": 0,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "elapsed_s": 130.5054768000009,
+  "agent_success": true,
+  "path_valid": true,
+  "plr": 1.0,
+  "sd": 1.0,
+  "sm": 1.264405455326821e-07,
+  "path_length": 9.899494936611665,
+  "code_file": "results\\generator\\exp1_code_capture_rerun\\exp1_main_comparison\\generated_code\\smoothness\\cec2024_s01\\run_001.py"
+}

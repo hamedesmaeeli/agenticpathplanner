@@ -1,0 +1,19 @@
+{
+  "experiment": "exp1",
+  "method": "generator",
+  "map_id": "cec2024_s01",
+  "difficulty": "simple",
+  "mission_type": "efficiency",
+  "mission": "Navigate from start to goal in a small open environment. Minimise total path distance. There are no special constraints.",
+  "run_index": 0,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "elapsed_s": 225.70694319999893,
+  "agent_success": false,
+  "path_valid": false,
+  "plr": null,
+  "sd": null,
+  "sm": null,
+  "path_length": 0.0,
+  "code_file": "results\\generator\\exp1_code_capture\\exp1_main_comparison\\generated_code\\efficiency\\cec2024_s01\\run_001.py"
+}

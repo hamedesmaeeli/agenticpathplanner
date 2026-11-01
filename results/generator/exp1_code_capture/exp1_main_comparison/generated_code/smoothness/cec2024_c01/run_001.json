@@ -1,0 +1,19 @@
+{
+  "experiment": "exp1",
+  "method": "generator",
+  "map_id": "cec2024_c01",
+  "difficulty": "complex",
+  "mission_type": "smoothness",
+  "mission": "Navigate the cluttered environment as smoothly as possible. Minimise total turning angle. Straight or gently curved segments are preferred.",
+  "run_index": 0,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "elapsed_s": 178.1748236000003,
+  "agent_success": false,
+  "path_valid": false,
+  "plr": null,
+  "sd": null,
+  "sm": null,
+  "path_length": 0.0,
+  "code_file": "results\\generator\\exp1_code_capture\\exp1_main_comparison\\generated_code\\smoothness\\cec2024_c01\\run_001.py"
+}

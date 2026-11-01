@@ -54,7 +54,7 @@ class GeneratorAgent(BaseAgent):
 
     def act(self, plan: dict, context: AgentContext) -> AgentResult:
         code = plan.get("code", "")
-        path, stored_code = self.executor.execute(code, context.instance)
+        path, _stored_code = self.executor.execute(code, context.instance)
 
         return AgentResult(
             path=path,
@@ -62,7 +62,9 @@ class GeneratorAgent(BaseAgent):
                          and path[-1] == context.instance.goal),
             agent_name=self.name,
             reasoning=f"Generated algorithm for mission: {plan.get('mission','')}",
-            generated_code=stored_code,
+            # Keep the LLM output for experiment reproducibility even when
+            # CodeExecutor cannot compile or execute it.
+            generated_code=code.strip() or None,
             metadata={"model": plan.get("model", ""), "mission": plan.get("mission", "")},
         )
 

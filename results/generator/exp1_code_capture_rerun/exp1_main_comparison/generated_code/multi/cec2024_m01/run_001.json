@@ -1,0 +1,19 @@
+{
+  "experiment": "exp1",
+  "method": "generator",
+  "map_id": "cec2024_m01",
+  "difficulty": "medium",
+  "mission_type": "multi",
+  "mission": "Navigate the corridor maze balancing speed and safety. Do not hug walls. Aim for a path that is both short and clear of obstacles.",
+  "run_index": 0,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "elapsed_s": 151.97703320000073,
+  "agent_success": true,
+  "path_valid": true,
+  "plr": 1.3856675991825909,
+  "sd": 1.0,
+  "sm": 3.926990922354363,
+  "path_length": 33.31370849898476,
+  "code_file": "results\\generator\\exp1_code_capture_rerun\\exp1_main_comparison\\generated_code\\multi\\cec2024_m01\\run_001.py"
+}

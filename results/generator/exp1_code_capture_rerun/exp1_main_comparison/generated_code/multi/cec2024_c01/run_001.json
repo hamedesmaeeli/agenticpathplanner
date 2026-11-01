@@ -1,0 +1,19 @@
+{
+  "experiment": "exp1",
+  "method": "generator",
+  "map_id": "cec2024_c01",
+  "difficulty": "complex",
+  "mission_type": "multi",
+  "mission": "Navigate dense clutter efficiently without sacrificing safety entirely. Prioritise finding a valid path, but avoid unnecessary obstacle proximity.",
+  "run_index": 0,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "elapsed_s": 178.19488750000164,
+  "agent_success": true,
+  "path_valid": true,
+  "plr": 1.2798647846705202,
+  "sd": 1.0,
+  "sm": 19.634954211376762,
+  "path_length": 48.87005768508881,
+  "code_file": "results\\generator\\exp1_code_capture_rerun\\exp1_main_comparison\\generated_code\\multi\\cec2024_c01\\run_001.py"
+}

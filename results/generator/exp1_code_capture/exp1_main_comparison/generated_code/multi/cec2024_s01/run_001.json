@@ -1,0 +1,19 @@
+{
+  "experiment": "exp1",
+  "method": "generator",
+  "map_id": "cec2024_s01",
+  "difficulty": "simple",
+  "mission_type": "multi",
+  "mission": "Find a path that is both efficient and safe. Stay reasonably close to the straight-line distance while keeping at least 1 cell from obstacles.",
+  "run_index": 0,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "elapsed_s": 136.25853520000055,
+  "agent_success": false,
+  "path_valid": false,
+  "plr": null,
+  "sd": null,
+  "sm": null,
+  "path_length": 0.0,
+  "code_file": "results\\generator\\exp1_code_capture\\exp1_main_comparison\\generated_code\\multi\\cec2024_s01\\run_001.py"
+}

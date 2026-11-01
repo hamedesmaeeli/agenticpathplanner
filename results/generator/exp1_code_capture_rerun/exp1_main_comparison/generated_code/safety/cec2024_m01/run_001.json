@@ -1,0 +1,19 @@
+{
+  "experiment": "exp1",
+  "method": "generator",
+  "map_id": "cec2024_m01",
+  "difficulty": "medium",
+  "mission_type": "safety",
+  "mission": "Navigate a corridor maze with maximum obstacle clearance. The platform is fragile; prioritise clearance over path length.",
+  "run_index": 0,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "elapsed_s": 140.16926930000045,
+  "agent_success": true,
+  "path_valid": true,
+  "plr": 1.1907435698305464,
+  "sd": 1.0,
+  "sm": 6.283185538987254,
+  "path_length": 28.627416997969522,
+  "code_file": "results\\generator\\exp1_code_capture_rerun\\exp1_main_comparison\\generated_code\\safety\\cec2024_m01\\run_001.py"
+}

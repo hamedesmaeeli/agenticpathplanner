@@ -190,6 +190,7 @@ def _run_generator(
     run_index: int,
     model: str,
     temperature: float,
+    generated_code_dir: Path | None = None,
 ) -> RunRecord:
     ctx = AgentContext(instance=instance, mission=mission)
     t0 = time.perf_counter()
@@ -208,6 +209,43 @@ def _run_generator(
 
     m = evaluate_path(result.path, instance.grid, instance.start, instance.goal)
     code = result.generated_code or ""
+
+    # Save the exact generated source for Exp1, including code that failed
+    # compilation or execution. The matching JSON sidecar links it to metrics.
+    if generated_code_dir is not None and code:
+        code_path = (
+            generated_code_dir
+            / mission_type
+            / instance.map_id
+            / f"run_{run_index + 1:03d}.py"
+        )
+        code_path.parent.mkdir(parents=True, exist_ok=True)
+        code_path.write_text(code, encoding="utf-8")
+
+        metadata = {
+            "experiment": experiment,
+            "method": "generator",
+            "map_id": instance.map_id,
+            "difficulty": instance.difficulty,
+            "mission_type": mission_type,
+            "mission": mission,
+            "run_index": run_index,
+            "model": model,
+            "temperature": temperature,
+            "elapsed_s": elapsed,
+            "agent_success": result.success,
+            "path_valid": m.valid,
+            "plr": m.plr if m.valid else None,
+            "sd": m.sd if m.valid else None,
+            "sm": m.sm if m.valid else None,
+            "path_length": m.path_length,
+            "code_file": str(code_path),
+        }
+        code_path.with_suffix(".json").write_text(
+            json.dumps(metadata, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+        log.info("    Generated source saved → %s", code_path)
 
     return RunRecord(
         experiment=experiment,
@@ -370,7 +408,8 @@ def run_exp1(
                 for i in range(runs):
                     rec = _run_generator(
                         generator, instance, mission,
-                        "exp1", mission_type, i, model, temperature
+                        "exp1", mission_type, i, model, temperature,
+                        generated_code_dir=out_dir / "generated_code",
                     )
                     records.append(rec)
                     _log_record(rec)

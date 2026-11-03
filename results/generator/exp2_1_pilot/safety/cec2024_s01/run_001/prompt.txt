@@ -1,0 +1,61 @@
+===== SYSTEM =====
+You are an expert algorithm designer for grid-based autonomous path planning.
+Return ONLY executable Python source code. No Markdown fences or explanations.
+Define exactly: def plan(grid, start, goal):
+- grid is a 2-D numpy-compatible array: 0=free, 1=obstacle.
+- start and goal are (row, col) integer tuples.
+- Return a list of (row, col) integer tuples including start and goal; return [] if unreachable.
+
+Movement contract:
+- Eight-connected moves: dr,dc each in {-1,0,1}, excluding (0,0).
+- Destination must be in bounds and free. Diagonal corner cutting is permitted.
+- Orthogonal distance is 1; diagonal distance is sqrt(2).
+
+Reliability contract (mandatory):
+1. Use explicit, consistent state tuples. Never unpack a state into a different number of variables.
+2. Keep accumulated objective costs in dictionaries keyed by the COMPLETE search state; use full-state dictionary keys.
+3. Do not store an accumulated cost inside a state and then add it again.
+4. Check bounds BEFORE indexing grid or any grid-shaped array.
+5. Use heapq entries with a monotonically increasing counter before non-orderable state data.
+6. Reconstruct the path from a predecessor dictionary; verify start and goal are included.
+7. Handle start==goal and blocked/out-of-bounds endpoints.
+8. Use only Python standard library and numpy. Explicitly import every module used; allowed: math, heapq, itertools, collections.
+9. No file access, network, external services, or project imports.
+10. Implement the exact mission objective below. Returning any feasible shortest path is not sufficient unless it optimizes that mission.
+
+
+===== USER =====
+Map: cec2024_s01 (10x10; simple)
+Start: (1, 1); Goal: (8, 8)
+Obstacle ratio: 6.00%
+
+Grid (S=start, G=goal, .=free, #=obstacle):
+. . . . . . . . . .
+. S . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. # # # . . # # # .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . G .
+. . . . . . . . . .
+
+MISSION: SAFETY — MAXIMIZE THE PATH BOTTLENECK CLEARANCE
+
+For each free cell p, clearance[p] is the minimum Euclidean distance from p's
+cell centre to any obstacle cell centre (infinity if no obstacles).
+Maximize C_min(path)=min(clearance[p] for p on path). Among paths with equal
+maximum C_min, minimize geometric path length.
+
+Required method: widest-path Dijkstra with lexicographic labels.
+For each cell store best[(r,c)] = (bottleneck, length), initialized at start
+as (clearance[start],0). Extending u->v gives candidate=(min(bottleneck,
+clearance[v]), length+step). Candidate is better if its bottleneck is larger;
+if equal, its length is smaller. Use a max-priority queue (negative bottleneck,
+then length, then counter, then cell). Do not use ordinary shortest-path A*.
+Compute clearance using obstacle coordinates and Euclidean distances; do not
+index neighboring cells without checking bounds. A target clearance of 2.0 is
+desirable but not mandatory if infeasible.
+
+Before returning code, check state tuple arity, full-state dictionary keys, cost accumulation, and all array bounds. Output only Python source.

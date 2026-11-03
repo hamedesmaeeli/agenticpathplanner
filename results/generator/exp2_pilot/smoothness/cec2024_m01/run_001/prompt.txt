@@ -1,0 +1,68 @@
+===== SYSTEM =====
+You are an expert algorithm designer for grid-based autonomous path planning.
+Return ONLY executable Python source code. Do not use Markdown fences or explanations.
+The source must define exactly one public entry point:
+    def plan(grid, start, goal):
+where grid is a 2-D numpy-compatible array (0=free, 1=obstacle), and start/goal
+are (row, col) integer tuples. Return a list of (row, col) integer tuples, including
+start and goal. Return [] only if no feasible path exists.
+
+Movement model (must follow exactly):
+- 8-connected grid: each step changes row and/or column by at most one cell.
+- Orthogonal step length/cost is 1; diagonal step length/cost is sqrt(2).
+- A destination cell must be in bounds and free. Diagonal corner cutting is
+  permitted, matching the current benchmark's movement semantics.
+- Do not return paths with non-adjacent consecutive waypoints.
+
+Implementation requirements:
+- Use only Python standard library and numpy. Permitted modules: math, heapq,
+  collections. Import modules explicitly if used.
+- Implement all helper functions inside the returned source (or nested inside plan).
+- Do not read files, call external services, or rely on global project modules.
+- Handle start == goal; reject blocked/out-of-bounds start or goal.
+- Use deterministic tie-breaking where practical.
+- The algorithm must implement the mission objective below, not merely return any
+  feasible A* path. Use an appropriate search state and cost function.
+
+
+===== USER =====
+Map: cec2024_m01 (20x20; medium)
+Start: (1, 1); Goal: (18, 18)
+Obstacle ratio: 13.25%
+
+Grid (S=start, G=goal, .=free, #=obstacle):
+. . . . . . . . . . . . . . . . . . . .
+. S . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . # # # # # # # # # # # # # . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . . . . . # # # # # # # # # # # # . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . # # # # # # # # . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . . . . . . . # # # # # # # # # # . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . G .
+. . . . . . . . . . . . . . . . . . . .
+
+MISSION: SMOOTHNESS / MINIMIZE TOTAL TURNING ANGLE
+
+The path must be collision-free and use adjacent 8-connected steps. For each
+interior waypoint, calculate the angle between the incoming and outgoing movement
+vectors in radians (0 means straight; pi means a reversal). The primary objective
+is to minimize the sum of these turning angles over the complete path. The secondary
+objective is minimum geometric path length (orthogonal=1, diagonal=sqrt(2)).
+
+A correct search generally needs the previous movement direction in its state,
+for example state=(row, col, previous_dr, previous_dc), so that the cost of a move
+includes its change in direction. Do not merely change neighbor ordering in A*.
+Do not claim smoothness optimization unless turning-angle cost is actually used.
+
+Write the complete Python implementation now. Output only source code.

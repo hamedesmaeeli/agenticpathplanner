@@ -1,0 +1,58 @@
+import numpy as np
+import heapq
+
+def plan(grid, start, goal):
+    if grid[start] == 1 or grid[goal] == 1:
+        return []
+
+    rows, cols = grid.shape
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+
+    def heuristic(a, b):
+        return max(abs(a[0] - b[0]), abs(a[1] - b[1]))
+
+    def clearance(pos):
+        x, y = pos
+        min_dist = float('inf')
+        for dx in range(-2, 3):
+            for dy in range(-2, 3):
+                if grid[x + dx, y + dy] == 1:
+                    dist = np.sqrt((x - (x + dx))**2 + (y - (y + dy))**2)
+                    min_dist = min(min_dist, dist)
+        return min_dist
+
+    def edge_cost(u, v):
+        d = heuristic(u, v) if u != v else 0
+        c = clearance(v)
+        return d * (1 + 0.5 / (1 + c))
+
+    open_set = []
+    heapq.heappush(open_set, (0, start))
+    came_from = {}
+    cost_so_far = {start: 0}
+
+    while open_set:
+        current = heapq.heappop(open_set)[1]
+
+        if current == goal:
+            break
+
+        for direction in directions:
+            neighbor = (current[0] + direction[0], current[1] + direction[1])
+            if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols and grid[neighbor] == 0:
+                new_cost = cost_so_far[current] + edge_cost(current, neighbor)
+                if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
+                    cost_so_far[neighbor] = new_cost
+                    priority = new_cost + heuristic(neighbor, goal)
+                    heapq.heappush(open_set, (priority, neighbor))
+                    came_from[neighbor] = current
+
+    path = []
+    if goal in came_from:
+        while goal != start:
+            path.append(goal)
+            goal = came_from[goal]
+        path.append(start)
+        path.reverse()
+
+    return path

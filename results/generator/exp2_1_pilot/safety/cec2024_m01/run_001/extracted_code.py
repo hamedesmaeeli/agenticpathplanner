@@ -1,0 +1,61 @@
+import numpy as np
+import heapq
+from math import sqrt
+
+def plan(grid, start, goal):
+    rows, cols = grid.shape
+    if not (0 <= start[0] < rows and 0 <= start[1] < cols and 
+            0 <= goal[0] < rows and 0 <= goal[1] < cols):
+        return []
+
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+
+    def clearance(cell):
+        r, c = cell
+        min_dist = float('inf')
+        for i in range(rows):
+            for j in range(cols):
+                if grid[i, j] == 1:
+                    dist = sqrt((r - i) ** 2 + (c - j) ** 2)
+                    if dist < min_dist:
+                        min_dist = dist
+        return min_dist
+
+    start_clearance = clearance(start)
+    goal_clearance = clearance(goal)
+
+    if start_clearance == float('inf') or goal_clearance == float('inf'):
+        return []
+
+    best = {(start[0], start[1]): (start_clearance, 0)}
+    pq = [(-start_clearance, 0, start[0], start[1])]
+    counter = 0
+
+    while pq:
+        bottleneck, length, r, c = heapq.heappop(pq)
+        bottleneck = -bottleneck
+
+        if (r, c) == goal:
+            path = [(r, c)]
+            while (r, c) in best and best[(r, c)][1] < length:
+                for dr, dc in directions:
+                    nr, nc = r + dr, c + dc
+                    if 0 <= nr < rows and 0 <= nc < cols and grid[nr, nc] == 0:
+                        path.append((nr, nc))
+                        (r, c) = (nr, nc)
+            return list(reversed(path))
+
+        for dr, dc in directions:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and grid[nr, nc] == 0:
+                new_bottleneck = min(bottleneck, clearance((nr, nc)))
+                new_length = length + (1 if abs(dr) + abs(dc) == 2 else sqrt(2))
+                new_state = (nr, nc)
+
+                if new_state not in best or (new_bottleneck > best[new_state][0] or 
+                                            (new_bottleneck == best[new_state][0] and new_length < best[new_state][1])):
+                    best[new_state] = (new_bottleneck, new_length)
+                    heapq.heappush(pq, (-new_bottleneck, new_length, nr, nc))
+                    counter += 1
+
+    return []

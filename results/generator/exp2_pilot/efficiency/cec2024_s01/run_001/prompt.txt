@@ -1,0 +1,55 @@
+===== SYSTEM =====
+You are an expert algorithm designer for grid-based autonomous path planning.
+Return ONLY executable Python source code. Do not use Markdown fences or explanations.
+The source must define exactly one public entry point:
+    def plan(grid, start, goal):
+where grid is a 2-D numpy-compatible array (0=free, 1=obstacle), and start/goal
+are (row, col) integer tuples. Return a list of (row, col) integer tuples, including
+start and goal. Return [] only if no feasible path exists.
+
+Movement model (must follow exactly):
+- 8-connected grid: each step changes row and/or column by at most one cell.
+- Orthogonal step length/cost is 1; diagonal step length/cost is sqrt(2).
+- A destination cell must be in bounds and free. Diagonal corner cutting is
+  permitted, matching the current benchmark's movement semantics.
+- Do not return paths with non-adjacent consecutive waypoints.
+
+Implementation requirements:
+- Use only Python standard library and numpy. Permitted modules: math, heapq,
+  collections. Import modules explicitly if used.
+- Implement all helper functions inside the returned source (or nested inside plan).
+- Do not read files, call external services, or rely on global project modules.
+- Handle start == goal; reject blocked/out-of-bounds start or goal.
+- Use deterministic tie-breaking where practical.
+- The algorithm must implement the mission objective below, not merely return any
+  feasible A* path. Use an appropriate search state and cost function.
+
+
+===== USER =====
+Map: cec2024_s01 (10x10; simple)
+Start: (1, 1); Goal: (8, 8)
+Obstacle ratio: 6.00%
+
+Grid (S=start, G=goal, .=free, #=obstacle):
+. . . . . . . . . .
+. S . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. # # # . . # # # .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . G .
+. . . . . . . . . .
+
+MISSION: EFFICIENCY / SHORTEST PATH
+
+Objective: find a collision-free path with minimum geometric length under the
+specified 8-connected movement model. Orthogonal moves cost 1 and diagonal moves
+cost sqrt(2). Use A* with the octile-distance heuristic, or Dijkstra's algorithm.
+For dx=abs(r-goal_r), dy=abs(c-goal_c), the octile heuristic is
+max(dx,dy) + (sqrt(2)-1)*min(dx,dy). Do NOT use Manhattan distance for this
+8-connected cost model. The primary objective is total path length; deterministic
+secondary tie-breaking is acceptable. Do not add clearance or smoothness penalties.
+
+Write the complete Python implementation now. Output only source code.

@@ -1,0 +1,69 @@
+import numpy as np
+import heapq
+
+def plan(grid, start, goal):
+    if not (0 <= start[0] < grid.shape[0] and 0 <= start[1] < grid.shape[1] and 
+            0 <= goal[0] < grid.shape[0] and 0 <= goal[1] < grid.shape[1]):
+        return []
+
+    if grid[start] == 1 or grid[goal] == 1:
+        return []
+
+    def heuristic(a, b):
+        return np.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
+
+    def clearance(p):
+        x, y = p
+        min_dist = float('inf')
+        for i in range(grid.shape[0]):
+            for j in range(grid.shape[1]):
+                if grid[i, j] == 1:
+                    dist = np.sqrt((x - i) ** 2 + (y - j) ** 2)
+                    if dist < min_dist:
+                        min_dist = dist
+        return min_dist
+
+    def cost(p):
+        x, y = p
+        if (x, y) in [(start[0], start[1]), (goal[0], goal[1])]:
+            return 0
+        return heuristic((x, y), start)
+
+    open_set = []
+    heapq.heappush(open_set, (-clearance(start), cost(start), start))
+    came_from = {}
+    g_score = {start: 0}
+    f_score = {start: -clearance(start)}
+
+    while open_set:
+        _, _, current = heapq.heappop(open_set)
+
+        if current == goal:
+            path = []
+            while current in came_from:
+                path.append(current)
+                current = came_from[current]
+            path.append(start)
+            path.reverse()
+            return path
+
+        for dx, dy in [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]:
+            neighbor = (current[0] + dx, current[1] + dy)
+            if not (0 <= neighbor[0] < grid.shape[0] and 0 <= neighbor[1] < grid.shape[1]):
+                continue
+            if grid[neighbor] == 1:
+                continue
+
+            tentative_g_score = g_score[current]
+            if dx != 0 and dy != 0:
+                tentative_g_score += np.sqrt(2)
+            else:
+                tentative_g_score += 1
+
+            if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
+                came_from[neighbor] = current
+                g_score[neighbor] = tentative_g_score
+                f_score[neighbor] = -clearance(neighbor) + tentative_g_score
+                heapq.heappush(open_set, (-f_score[neighbor], tentative_g_score, neighbor))
+
+    return []

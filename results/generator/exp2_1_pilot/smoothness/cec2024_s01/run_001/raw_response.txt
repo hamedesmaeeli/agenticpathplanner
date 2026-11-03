@@ -1,0 +1,50 @@
+```python
+import numpy as np
+import heapq
+from math import acos, cos, pi, sqrt
+
+def plan(grid, start, goal):
+    if not (0 <= start[0] < grid.shape[0] and 0 <= start[1] < grid.shape[1]):
+        return []
+    if not (0 <= goal[0] < grid.shape[0] and 0 <= goal[1] < grid.shape[1]):
+        return []
+    if grid[start] == 1 or grid[goal] == 1:
+        return []
+
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    direction_vectors = [(dr, dc) for dr, dc in directions if not (dr == 0 and dc == 0)]
+
+    start_state = (*start, 0, 0)
+    goal_state = (*goal, None, None)
+
+    best_cost = {start_state: (0, 0)}
+    came_from = {}
+    open_set = [(0, start_state)]
+    counter = 0
+
+    while open_set:
+        _, current_state = heapq.heappop(open_set)
+        current_row, current_col, prev_dr, prev_dc = current_state
+
+        if current_state == goal_state:
+            path = []
+            while current_state in came_from:
+                path.append(current_state[:2])
+                current_state = came_from[current_state]
+            path.reverse()
+            return path
+
+        for dr, dc in direction_vectors:
+            next_row, next_col = current_row + dr, current_col + dc
+            if 0 <= next_row < grid.shape[0] and 0 <= next_col < grid.shape[1] and grid[next_row, next_col] == 0:
+                next_state = (next_row, next_col, dr, dc)
+                turn_angle = 0 if prev_dr is None else acos(max(-1, min(1, (prev_dr * dr + prev_dc * dc) / (sqrt(prev_dr**2 + prev_dc**2) * sqrt(dr**2 + dc**2)))))
+                new_cost = best_cost[current_state][0] + turn_angle, best_cost[current_state][1] + 1 if prev_dr is None or (prev_dr != dr and prev_dc != dc) else 0
+                if next_state not in best_cost or new_cost < best_cost[next_state]:
+                    best_cost[next_state] = new_cost
+                    came_from[next_state] = current_state
+                    heapq.heappush(open_set, (new_cost[0], counter, next_state))
+                    counter += 1
+
+    return []
+```

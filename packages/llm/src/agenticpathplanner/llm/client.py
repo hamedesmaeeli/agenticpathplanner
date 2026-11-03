@@ -62,7 +62,8 @@ class OllamaClient:
 
     def list_models(self) -> list[str]:
         try:
-            return [m["name"] for m in self._client.list().get("models", [])]
+            return [name for m in self._client.list().get("models", [])
+                    if (name := m.get("name") or m.get("model"))]
         except Exception as exc:
             log.warning("Could not list Ollama models: %s", exc)
             return []

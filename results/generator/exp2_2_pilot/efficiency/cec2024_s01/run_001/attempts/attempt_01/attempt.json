@@ -1,0 +1,81 @@
+{
+  "attempt": 1,
+  "response_error": null,
+  "model": "qwen2.5-coder:7b",
+  "generation_time_s": 288.7192863,
+  "execution": {
+    "code_extracted": true,
+    "compile_success": true,
+    "plan_fn_found": true,
+    "execution_success": true,
+    "compile_error": null,
+    "runtime_error": null,
+    "planning_runtime_s": 0.0006933000004210044
+  },
+  "validation": {
+    "mission": "efficiency",
+    "valid": true,
+    "has_path": true,
+    "starts_correctly": true,
+    "ends_correctly": true,
+    "coordinates_well_formed": true,
+    "in_bounds": true,
+    "obstacle_free": true,
+    "adjacent_steps": true,
+    "corner_cutting_steps": 0,
+    "path_length": 9.899494936611665,
+    "euclidean_lower_bound": 9.899494936611665,
+    "plr_euclidean": 1.0,
+    "shortest_grid_path_length": 9.899494936611667,
+    "efficiency_ratio": 0.9999999999999998,
+    "min_clearance": 1.0,
+    "mean_clearance": 2.176776695296637,
+    "safety_threshold": 2.0,
+    "safety_threshold_feasible": false,
+    "safety_threshold_met": false,
+    "total_turn_angle_rad": 0.0,
+    "turn_count": 0,
+    "multi_weighted_cost": 11.724452847995972,
+    "mission_objective_value": 0.9999999999999998,
+    "mission_optimum_value": 1.0,
+    "mission_optimum_secondary_value": 9.899494936611667,
+    "mission_objective_gap": -2.220446049250313e-16,
+    "mission_objective_ratio": 0.9999999999999998,
+    "mission_objective_optimal": true,
+    "errors": []
+  },
+  "path": [
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      4,
+      4
+    ],
+    [
+      5,
+      5
+    ],
+    [
+      6,
+      6
+    ],
+    [
+      7,
+      7
+    ],
+    [
+      8,
+      8
+    ]
+  ]
+}

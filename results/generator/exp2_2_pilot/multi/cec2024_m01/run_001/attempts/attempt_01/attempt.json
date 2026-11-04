@@ -1,0 +1,141 @@
+{
+  "attempt": 1,
+  "response_error": null,
+  "model": "qwen2.5-coder:7b",
+  "generation_time_s": 335.5694069000001,
+  "execution": {
+    "code_extracted": true,
+    "compile_success": true,
+    "plan_fn_found": true,
+    "execution_success": true,
+    "compile_error": null,
+    "runtime_error": null,
+    "planning_runtime_s": 0.027711400000043795
+  },
+  "validation": {
+    "mission": "multi",
+    "valid": true,
+    "has_path": true,
+    "starts_correctly": true,
+    "ends_correctly": true,
+    "coordinates_well_formed": true,
+    "in_bounds": true,
+    "obstacle_free": true,
+    "adjacent_steps": true,
+    "corner_cutting_steps": 0,
+    "path_length": 28.627416997969522,
+    "euclidean_lower_bound": 24.041630560342615,
+    "plr_euclidean": 1.1907435698305464,
+    "shortest_grid_path_length": 26.970562748477146,
+    "efficiency_ratio": 1.0614319495274873,
+    "min_clearance": 1.0,
+    "mean_clearance": 1.7695177703223453,
+    "safety_threshold": 2.0,
+    "safety_threshold_feasible": true,
+    "safety_threshold_met": false,
+    "total_turn_angle_rad": 6.283185307179586,
+    "turn_count": 6,
+    "multi_weighted_cost": 34.330595813034925,
+    "mission_objective_value": 34.330595813034925,
+    "mission_optimum_value": 31.898816465099763,
+    "mission_optimum_secondary_value": "NaN",
+    "mission_objective_gap": 2.431779347935162,
+    "mission_objective_ratio": 1.076234155915965,
+    "mission_objective_optimal": false,
+    "errors": []
+  },
+  "path": [
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      5,
+      2
+    ],
+    [
+      6,
+      3
+    ],
+    [
+      7,
+      4
+    ],
+    [
+      8,
+      5
+    ],
+    [
+      9,
+      6
+    ],
+    [
+      9,
+      7
+    ],
+    [
+      9,
+      8
+    ],
+    [
+      9,
+      9
+    ],
+    [
+      9,
+      10
+    ],
+    [
+      9,
+      11
+    ],
+    [
+      10,
+      12
+    ],
+    [
+      11,
+      13
+    ],
+    [
+      12,
+      14
+    ],
+    [
+      13,
+      15
+    ],
+    [
+      14,
+      16
+    ],
+    [
+      15,
+      17
+    ],
+    [
+      16,
+      18
+    ],
+    [
+      17,
+      17
+    ],
+    [
+      18,
+      18
+    ]
+  ]
+}

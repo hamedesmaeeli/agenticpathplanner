@@ -1,0 +1,44 @@
+```python
+import heapq
+import numpy as np
+
+def plan(grid, start, goal):
+    if not (0 <= start[0] < grid.shape[0] and 0 <= start[1] < grid.shape[1]):
+        return []
+    if not (0 <= goal[0] < grid.shape[0] and 0 <= goal[1] < grid.shape[1]):
+        return []
+    if grid[start] == 1 or grid[goal] == 1:
+        return []
+
+    rows, cols = grid.shape
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    g_score = {start: 0}
+    came_from = {}
+    counter = 0
+    open_set = [(0, counter, start)]
+
+    while open_set:
+        _, _, current = heapq.heappop(open_set)
+
+        if current == goal:
+            path = []
+            while current in came_from:
+                path.append(current)
+                current = came_from[current]
+            path.append(start)
+            return path[::-1]
+
+        for dr, dc in directions:
+            neighbor = (current[0] + dr, current[1] + dc)
+            if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols and grid[neighbor] == 0:
+                step = np.hypot(dr, dc)
+                tentative_g_score = g_score[current] + step
+                if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative_g_score
+                    priority = tentative_g_score + max(abs(neighbor[0] - goal[0]), abs(neighbor[1] - goal[1])) + (np.sqrt(2) - 1) * min(abs(neighbor[0] - goal[0]), abs(neighbor[1] - goal[1]))
+                    counter += 1
+                    heapq.heappush(open_set, (priority, counter, neighbor))
+
+    return []
+```

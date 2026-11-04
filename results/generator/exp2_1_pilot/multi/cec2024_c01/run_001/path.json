@@ -1,0 +1,14 @@
+{
+  "map_id": "cec2024_c01",
+  "mission": "multi",
+  "run": 1,
+  "start": [
+    1,
+    1
+  ],
+  "goal": [
+    28,
+    28
+  ],
+  "path": []
+}

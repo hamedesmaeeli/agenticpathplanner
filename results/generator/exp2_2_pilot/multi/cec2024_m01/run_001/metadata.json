@@ -1,0 +1,51 @@
+{
+  "experiment": "exp2.2",
+  "mission": "multi",
+  "map_id": "cec2024_m01",
+  "difficulty": "medium",
+  "run": 1,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "attempts_used": 2,
+  "selected_attempt": 1,
+  "attempt_history": [
+    {
+      "attempt": 1,
+      "compile_error": null,
+      "runtime_error": null,
+      "execution_success": true,
+      "valid": true,
+      "mission_objective_optimal": false,
+      "errors": [],
+      "objective": 34.330595813034925
+    },
+    {
+      "attempt": 2,
+      "compile_error": null,
+      "runtime_error": null,
+      "execution_success": true,
+      "valid": true,
+      "mission_objective_optimal": false,
+      "errors": [],
+      "objective": 34.330595813034925
+    }
+  ],
+  "generation_time_s": 667.7785078999987,
+  "selected_generation_time_s": 335.5694069000001,
+  "planning_runtime_s": 0.027711400000043795,
+  "prompt_tokens": 2297,
+  "completion_tokens": 1323,
+  "response_error": null,
+  "code_extracted": true,
+  "compile_success": true,
+  "plan_fn_found": true,
+  "execution_success": true,
+  "compile_error": null,
+  "runtime_error": null,
+  "path_returned": true,
+  "code_sha256": "08b7aea15382a16a9599dcab2eb71b02377663c3ac09b46cf7df649f89b3bdc7",
+  "case_dir": "results\\generator\\exp2_2_pilot\\multi\\cec2024_m01\\run_001",
+  "validation_file": "validation.json",
+  "path_file": "path.json",
+  "attempts_dir": "attempts/"
+}

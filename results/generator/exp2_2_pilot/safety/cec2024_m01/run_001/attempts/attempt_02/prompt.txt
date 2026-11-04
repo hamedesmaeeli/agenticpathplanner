@@ -1,0 +1,48 @@
+Map: cec2024_m01 (20x20; medium)
+Start: (1, 1); Goal: (18, 18)
+Obstacle ratio: 13.25%
+
+Grid (S=start, G=goal, .=free, #=obstacle):
+. . . . . . . . . . . . . . . . . . . .
+. S . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . # # # # # # # # # # # # # . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . . . . . # # # # # # # # # # # # . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . # # # # # # # # . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . . . . . . . # # # # # # # # # # . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . G .
+. . . . . . . . . . . . . . . . . . . .
+
+MISSION: SAFETY — MAXIMIZE THE PATH BOTTLENECK CLEARANCE
+
+For each free cell p, clearance[p] is the minimum Euclidean distance from p's
+cell centre to any obstacle cell centre (infinity if no obstacles).
+Maximize C_min(path)=min(clearance[p] for p on path). Among paths with equal
+maximum C_min, minimize geometric path length.
+
+Required method: widest-path Dijkstra with lexicographic labels.
+For each cell store best[(r,c)] = (bottleneck, length), initialized at start
+as (clearance[start],0). Extending u->v gives candidate=(min(bottleneck,
+clearance[v]), length+step). Candidate is better if its bottleneck is larger;
+if equal, its length is smaller. Use a max-priority queue (negative bottleneck,
+then length, then counter, then cell). Do not use ordinary shortest-path A*.
+Compute clearance using obstacle coordinates and Euclidean distances; do not
+index neighboring cells without checking bounds. A target clearance of 2.0 is
+desirable but not mandatory if infeasible.
+
+Before returning code, check state tuple arity, full-state dictionary keys, cost accumulation, and all array bounds. Output only Python source.
+
+REPAIR FEEDBACK FROM INDEPENDENT VALIDATOR:
+- Path validation errors: wrong_start, non_adjacent_waypoints
+Regenerate the complete implementation. Fix all reported errors. Explicitly import every module used; keep state tuple shapes consistent; check bounds before indexing; implement the exact mission objective. Return only Python source.

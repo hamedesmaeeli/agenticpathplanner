@@ -1,0 +1,41 @@
+{
+  "experiment": "exp2.2",
+  "mission": "multi",
+  "map_id": "cec2024_s01",
+  "difficulty": "simple",
+  "run": 1,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "attempts_used": 1,
+  "selected_attempt": 1,
+  "attempt_history": [
+    {
+      "attempt": 1,
+      "compile_error": null,
+      "runtime_error": null,
+      "execution_success": true,
+      "valid": true,
+      "mission_objective_optimal": true,
+      "errors": [],
+      "objective": 11.724452847995972
+    }
+  ],
+  "generation_time_s": 330.3825135999996,
+  "selected_generation_time_s": 330.3825135999996,
+  "planning_runtime_s": 0.016500199999427423,
+  "prompt_tokens": 778,
+  "completion_tokens": 652,
+  "response_error": null,
+  "code_extracted": true,
+  "compile_success": true,
+  "plan_fn_found": true,
+  "execution_success": true,
+  "compile_error": null,
+  "runtime_error": null,
+  "path_returned": true,
+  "code_sha256": "2d1c5bf1e8a82b8dc34f79039c1ce0354b77bfb80ef9ee09b73e86e88734d2e1",
+  "case_dir": "results\\generator\\exp2_2_pilot\\multi\\cec2024_s01\\run_001",
+  "validation_file": "validation.json",
+  "path_file": "path.json",
+  "attempts_dir": "attempts/"
+}

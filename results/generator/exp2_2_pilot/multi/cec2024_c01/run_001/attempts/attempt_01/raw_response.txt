@@ -1,0 +1,65 @@
+```python
+import numpy as np
+import heapq
+
+def plan(grid, start, goal):
+    rows, cols = grid.shape
+    if not (0 <= start[0] < rows and 0 <= start[1] < cols) or not (0 <= goal[0] < rows and 0 <= goal[1] < cols):
+        return []
+    
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    
+    def get_clearance(pos):
+        r, c = pos
+        if grid[r, c] == 1:
+            return float('inf')
+        distances = np.sqrt((np.arange(rows)[:, None] - r)**2 + (np.arange(cols)[None, :] - c)**2)
+        obstacle_indices = np.argwhere(grid == 1)
+        min_distances = np.min(distances[obstacle_indices[:, 0], obstacle_indices[:, 1]])
+        return min_distances
+    
+    clearance_map = np.array([[get_clearance((r, c)) for c in range(cols)] for r in range(rows)])
+    
+    start_state = (start[0], start[1])
+    goal_state = (goal[0], goal[1])
+    
+    if grid[start_state] == 1 or grid[goal_state] == 1:
+        return []
+    
+    if start_state == goal_state:
+        return [start_state]
+    
+    best_cost = {start_state: 0}
+    came_from = {}
+    counter = 0
+    
+    open_set = [(0, counter, start_state)]
+    
+    while open_set:
+        current_cost, _, current_state = heapq.heappop(open_set)
+        
+        if current_state == goal_state:
+            path = []
+            while current_state in came_from:
+                path.append(current_state)
+                current_state = came_from[current_state]
+            path.append(start_state)
+            path.reverse()
+            return path
+        
+        for dr, dc in directions:
+            neighbor = (current_state[0] + dr, current_state[1] + dc)
+            if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols and grid[neighbor] == 0:
+                step_cost = 1 if abs(dr) + abs(dc) == 1 else np.sqrt(2)
+                risk = 0 if clearance_map[neighbor] == float('inf') else 1 / (1 + clearance_map[neighbor])
+                edge_cost = step_cost * (1 + 0.5 * risk)
+                neighbor_cost = current_cost + edge_cost
+                
+                if neighbor not in best_cost or neighbor_cost < best_cost[neighbor]:
+                    best_cost[neighbor] = neighbor_cost
+                    came_from[neighbor] = current_state
+                    heapq.heappush(open_set, (neighbor_cost, counter, neighbor))
+                    counter += 1
+    
+    return []
+```

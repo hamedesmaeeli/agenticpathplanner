@@ -1,0 +1,48 @@
+Map: cec2024_c01 (30x30; complex)
+Start: (1, 1); Goal: (28, 28)
+Obstacle ratio: 28.11%
+
+Grid (S=start, G=goal, .=free, #=obstacle):
+. . . . # . . . # . . . . . . # . # . . . . . . . # . # # .
+. S . . . # # . # . . . . . . . . . . # # # . . . . . . # #
+. . . . . . . . # . # . . # # . . . . . . . . # # # . . # .
+# . . . . . . # # . . . # . . . . # # . . # . . # . . . . .
+. . # . # . . # # . # . . . . # . . . # . . . . . # . . . #
+. . # . # . . . . . # . # # . . . . . . . . # . # # . . . .
+. . . . . . . # . # . # # . # # . . # . . . . # # # # . # .
+. . # . . . # # . . . . . . . . # . . # # . . . . . . . # #
+. . # . . . . . . . . . . # # . . # # . # . . # . # . # # #
+# # # . . . . . . . # # # # . . # . . # . # . # . . . . . .
+. # . . . . . . # # . . # . . . . . . . . . . . . . . . . .
+. # . . # . # . # . # . . . . . . # . # . # . . . . . . . .
+. # # # . . . . . . . # . . # # . . . . . . . . . . . . # .
+. # . . # . . . . . . . . # . . . . # . . . # . # # # . # .
+. # # # . . # . # . . . . . # # # . . . . # . # # . . . # .
+# . . # # # . . . . . # . . . . . . # . . . # # # . . . . .
+. # . . # . . # . . . . . . . . . . . . . . . . . . . . . #
+# . # . . # . . # . . . # . # . . . . . . . . . # # . # # .
+. . . . # . . # . . . # # . # # . . . . # # . . . . . # . .
+. . . . . . . . . . . . # . . . # . # # . . . . # # . . . .
+. . . . . . . # . . . . . . . . . . # # . . . . . . . # . .
+. . # . # # . . . . . . # # . . # . . # . . . # . . . . . .
+# . # # . . . . . . # . . . . . . . # . # # # . . . . . . .
+. . # . . . . . . . # . # . . . . . . . . . . . . # . # . .
+. . # . # # # # . . . # # . # . # . . . # # . # . . . . . .
+# . # . . # . . # . . # # # . # # # # . # . . . # . . # . .
+# . . . . . . . . . # . . # # . # # . . . . . . # # . # . .
+# # . . # . . . . # # . . . . # . # . # . . . . . . . . . .
+# . . . # . . . # . # # . . # . . . . . . . . . # . . . G #
+. # . . . . . . . . . . . . # . . # # . . . # # . . # # # .
+
+MISSION: EFFICIENCY — EXACT SHORTEST GEOMETRIC PATH
+
+Use A* with the octile heuristic or Dijkstra. Edge cost is hypot(dr,dc):
+1 for orthogonal and sqrt(2) for diagonal. The octile heuristic is
+max(dx,dy)+(sqrt(2)-1)*min(dx,dy). Manhattan distance is NOT admissible here.
+Maintain g_score[(row,col)] and came_from[(row,col)]. On each neighbor:
+step = sqrt(2) if dr != 0 and dc != 0 else 1.0
+tentative = g_score[current] + step
+Do not reverse this condition. Do not add clearance or turn penalties.
+Return a minimum geometric-length path.
+
+Before returning code, check state tuple arity, full-state dictionary keys, cost accumulation, and all array bounds. Output only Python source.

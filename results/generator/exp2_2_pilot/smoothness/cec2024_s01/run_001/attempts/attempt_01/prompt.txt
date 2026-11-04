@@ -1,0 +1,34 @@
+Map: cec2024_s01 (10x10; simple)
+Start: (1, 1); Goal: (8, 8)
+Obstacle ratio: 6.00%
+
+Grid (S=start, G=goal, .=free, #=obstacle):
+. . . . . . . . . .
+. S . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. # # # . . # # # .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . G .
+. . . . . . . . . .
+
+MISSION: SMOOTHNESS — MINIMIZE TOTAL TURNING ANGLE, THEN LENGTH
+
+For consecutive movement vectors a and b, turning angle is
+acos(clamp(dot(a,b)/(norm(a)*norm(b)),-1,1)). Straight continuation costs 0;
+a reversal costs pi. Minimize the SUM of all interior turning angles. Among
+paths with equal total turning angle, minimize geometric path length.
+
+Required search state is exactly (row,col,prev_dr,prev_dc). Use initial state
+(start_row,start_col,0,0), where (0,0) means no previous direction and causes
+zero initial turn cost. A transition to (nr,nc) creates new state
+(nr,nc,dr,dc). Store best_cost[state]=(total_turn_angle,total_length), and
+came_from keyed by the COMPLETE state. Compare labels lexicographically.
+For noninitial states compute the turn angle from (prev_dr,prev_dc) to (dr,dc). If prev_dr == 0 and prev_dc == 0, set turn_angle=0.0 and NEVER divide by the norm of the zero vector. The goal test must compare only current_state[:2] with goal; do not create a goal-state tuple with a different arity.
+Use Dijkstra over these nonnegative lexicographic edge costs. Do not put g-cost
+inside the state. Do not key g_score only by (row,col), because direction matters.
+Reconstruct full state sequence and return only its (row,col) coordinates.
+
+Before returning code, check state tuple arity, full-state dictionary keys, cost accumulation, and all array bounds. Output only Python source.

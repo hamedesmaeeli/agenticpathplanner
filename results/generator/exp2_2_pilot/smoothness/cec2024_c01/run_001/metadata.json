@@ -1,0 +1,58 @@
+{
+  "experiment": "exp2.2",
+  "mission": "smoothness",
+  "map_id": "cec2024_c01",
+  "difficulty": "complex",
+  "run": 1,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "attempts_used": 2,
+  "selected_attempt": 2,
+  "attempt_history": [
+    {
+      "attempt": 1,
+      "compile_error": null,
+      "runtime_error": "ValueError: not enough values to unpack (expected 4, got 2)",
+      "execution_success": false,
+      "valid": false,
+      "mission_objective_optimal": false,
+      "errors": [
+        "empty_path",
+        "wrong_start",
+        "wrong_goal",
+        "out_of_bounds",
+        "obstacle_collision_or_invalid_cell",
+        "non_adjacent_waypoints"
+      ],
+      "objective": "Infinity"
+    },
+    {
+      "attempt": 2,
+      "compile_error": null,
+      "runtime_error": null,
+      "execution_success": true,
+      "valid": true,
+      "mission_objective_optimal": false,
+      "errors": [],
+      "objective": 23.561944901923454
+    }
+  ],
+  "generation_time_s": 796.1090934000003,
+  "selected_generation_time_s": 369.4921488,
+  "planning_runtime_s": 0.12191160000111267,
+  "prompt_tokens": 3456,
+  "completion_tokens": 1252,
+  "response_error": null,
+  "code_extracted": true,
+  "compile_success": true,
+  "plan_fn_found": true,
+  "execution_success": true,
+  "compile_error": null,
+  "runtime_error": null,
+  "path_returned": true,
+  "code_sha256": "9d5616bcd7eac6a6870a226fff09637649fba8aa75be744e586422f5c677e1d3",
+  "case_dir": "results\\generator\\exp2_2_pilot\\smoothness\\cec2024_c01\\run_001",
+  "validation_file": "validation.json",
+  "path_file": "path.json",
+  "attempts_dir": "attempts/"
+}

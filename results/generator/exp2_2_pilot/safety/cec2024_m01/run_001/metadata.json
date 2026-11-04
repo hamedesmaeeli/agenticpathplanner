@@ -1,0 +1,61 @@
+{
+  "experiment": "exp2.2",
+  "mission": "safety",
+  "map_id": "cec2024_m01",
+  "difficulty": "medium",
+  "run": 1,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "attempts_used": 2,
+  "selected_attempt": 2,
+  "attempt_history": [
+    {
+      "attempt": 1,
+      "compile_error": null,
+      "runtime_error": null,
+      "execution_success": true,
+      "valid": false,
+      "mission_objective_optimal": false,
+      "errors": [
+        "wrong_start",
+        "non_adjacent_waypoints"
+      ],
+      "objective": 0.0
+    },
+    {
+      "attempt": 2,
+      "compile_error": null,
+      "runtime_error": "NameError: name 'predecessors' is not defined",
+      "execution_success": false,
+      "valid": false,
+      "mission_objective_optimal": false,
+      "errors": [
+        "empty_path",
+        "wrong_start",
+        "wrong_goal",
+        "out_of_bounds",
+        "obstacle_collision_or_invalid_cell",
+        "non_adjacent_waypoints"
+      ],
+      "objective": 0.0
+    }
+  ],
+  "generation_time_s": 502.81772640000054,
+  "selected_generation_time_s": 257.9420960000007,
+  "planning_runtime_s": 0.0012545999998110346,
+  "prompt_tokens": 2262,
+  "completion_tokens": 1163,
+  "response_error": null,
+  "code_extracted": true,
+  "compile_success": true,
+  "plan_fn_found": true,
+  "execution_success": false,
+  "compile_error": null,
+  "runtime_error": "NameError: name 'predecessors' is not defined",
+  "path_returned": false,
+  "code_sha256": "968003a3298484201380a7b23f2138e0fd47dadae05ada8dc5017b616d8e28ed",
+  "case_dir": "results\\generator\\exp2_2_pilot\\safety\\cec2024_m01\\run_001",
+  "validation_file": "validation.json",
+  "path_file": "path.json",
+  "attempts_dir": "attempts/"
+}

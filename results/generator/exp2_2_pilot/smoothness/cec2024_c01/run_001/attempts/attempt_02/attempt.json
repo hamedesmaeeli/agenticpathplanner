@@ -1,0 +1,269 @@
+{
+  "attempt": 2,
+  "response_error": null,
+  "model": "qwen2.5-coder:7b",
+  "generation_time_s": 369.4921488,
+  "execution": {
+    "code_extracted": true,
+    "compile_success": true,
+    "plan_fn_found": true,
+    "execution_success": true,
+    "compile_error": null,
+    "runtime_error": null,
+    "planning_runtime_s": 0.12191160000111267
+  },
+  "validation": {
+    "mission": "smoothness",
+    "valid": true,
+    "has_path": true,
+    "starts_correctly": true,
+    "ends_correctly": true,
+    "coordinates_well_formed": true,
+    "in_bounds": true,
+    "obstacle_free": true,
+    "adjacent_steps": true,
+    "corner_cutting_steps": 0,
+    "path_length": 54.0,
+    "euclidean_lower_bound": 38.18376618407357,
+    "plr_euclidean": 1.414213562373095,
+    "shortest_grid_path_length": 40.52691193458118,
+    "efficiency_ratio": 1.3324479320597427,
+    "min_clearance": 1.0,
+    "mean_clearance": 1.1729775730062217,
+    "safety_threshold": 2.0,
+    "safety_threshold_feasible": false,
+    "safety_threshold_met": false,
+    "total_turn_angle_rad": 23.561944901923454,
+    "turn_count": 15,
+    "multi_weighted_cost": 66.67532377735877,
+    "mission_objective_value": 23.561944901923454,
+    "mission_optimum_value": 3.926990816987242,
+    "mission_optimum_secondary_value": 44.04163056034261,
+    "mission_objective_gap": 19.63495408493621,
+    "mission_objective_ratio": 6.000000000000001,
+    "mission_objective_optimal": false,
+    "errors": []
+  },
+  "path": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      2,
+      6
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      5,
+      7
+    ],
+    [
+      5,
+      8
+    ],
+    [
+      6,
+      8
+    ],
+    [
+      7,
+      8
+    ],
+    [
+      7,
+      9
+    ],
+    [
+      7,
+      10
+    ],
+    [
+      7,
+      11
+    ],
+    [
+      7,
+      12
+    ],
+    [
+      7,
+      13
+    ],
+    [
+      7,
+      14
+    ],
+    [
+      7,
+      15
+    ],
+    [
+      8,
+      15
+    ],
+    [
+      9,
+      15
+    ],
+    [
+      10,
+      15
+    ],
+    [
+      10,
+      16
+    ],
+    [
+      10,
+      17
+    ],
+    [
+      10,
+      18
+    ],
+    [
+      10,
+      19
+    ],
+    [
+      10,
+      20
+    ],
+    [
+      11,
+      20
+    ],
+    [
+      12,
+      20
+    ],
+    [
+      13,
+      20
+    ],
+    [
+      14,
+      20
+    ],
+    [
+      15,
+      20
+    ],
+    [
+      15,
+      21
+    ],
+    [
+      16,
+      21
+    ],
+    [
+      16,
+      22
+    ],
+    [
+      16,
+      23
+    ],
+    [
+      16,
+      24
+    ],
+    [
+      16,
+      25
+    ],
+    [
+      16,
+      26
+    ],
+    [
+      17,
+      26
+    ],
+    [
+      18,
+      26
+    ],
+    [
+      19,
+      26
+    ],
+    [
+      19,
+      27
+    ],
+    [
+      19,
+      28
+    ],
+    [
+      20,
+      28
+    ],
+    [
+      21,
+      28
+    ],
+    [
+      22,
+      28
+    ],
+    [
+      23,
+      28
+    ],
+    [
+      24,
+      28
+    ],
+    [
+      25,
+      28
+    ],
+    [
+      26,
+      28
+    ],
+    [
+      27,
+      28
+    ],
+    [
+      28,
+      28
+    ]
+  ]
+}

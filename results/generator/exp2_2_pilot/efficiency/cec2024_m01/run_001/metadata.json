@@ -1,0 +1,41 @@
+{
+  "experiment": "exp2.2",
+  "mission": "efficiency",
+  "map_id": "cec2024_m01",
+  "difficulty": "medium",
+  "run": 1,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "attempts_used": 1,
+  "selected_attempt": 1,
+  "attempt_history": [
+    {
+      "attempt": 1,
+      "compile_error": null,
+      "runtime_error": null,
+      "execution_success": true,
+      "valid": true,
+      "mission_objective_optimal": true,
+      "errors": [],
+      "objective": 0.9999999999999999
+    }
+  ],
+  "generation_time_s": 272.5577971999992,
+  "selected_generation_time_s": 272.5577971999992,
+  "planning_runtime_s": 0.010082400000101188,
+  "prompt_tokens": 1020,
+  "completion_tokens": 461,
+  "response_error": null,
+  "code_extracted": true,
+  "compile_success": true,
+  "plan_fn_found": true,
+  "execution_success": true,
+  "compile_error": null,
+  "runtime_error": null,
+  "path_returned": true,
+  "code_sha256": "a00de4a01b02c70ee81e285db0ebeb70e17ea6199a0a608068f75151b837dd07",
+  "case_dir": "results\\generator\\exp2_2_pilot\\efficiency\\cec2024_m01\\run_001",
+  "validation_file": "validation.json",
+  "path_file": "path.json",
+  "attempts_dir": "attempts/"
+}

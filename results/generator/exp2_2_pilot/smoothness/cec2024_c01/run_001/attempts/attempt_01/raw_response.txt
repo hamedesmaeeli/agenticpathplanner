@@ -1,0 +1,63 @@
+```python
+import numpy as np
+import heapq
+
+def plan(grid, start, goal):
+    rows, cols = grid.shape
+    directions = [(0, 1), (1, 0), (0, -1), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+    
+    def is_valid(state):
+        row, col, _, _ = state
+        return 0 <= row < rows and 0 <= col < cols and grid[row, col] == 0
+    
+    def heuristic(state):
+        row, col, _, _ = state
+        return np.sqrt((row - goal[0])**2 + (col - goal[1])**2)
+    
+    def turn_angle(prev_dr, prev_dc, dr, dc):
+        if prev_dr == 0 and prev_dc == 0:
+            return 0.0
+        dot_product = prev_dr * dr + prev_dc * dc
+        norm_prev = np.sqrt(prev_dr**2 + prev_dc**2)
+        norm_curr = np.sqrt(dr**2 + dc**2)
+        cos_angle = max(-1, min(1, dot_product / (norm_prev * norm_curr)))
+        return np.arccos(cos_angle)
+    
+    start_state = (start[0], start[1], 0, 0)
+    goal_state = (goal[0], goal[1])
+    
+    if not is_valid(start_state) or not is_valid(goal_state):
+        return []
+    
+    open_set = [(heuristic(start_state), 0, start_state)]
+    came_from = {}
+    best_cost = {start_state: (0.0, 0)}
+    
+    while open_set:
+        _, _, current_state = heapq.heappop(open_set)
+        
+        if current_state[:2] == goal_state:
+            path = []
+            while current_state in came_from:
+                path.append(current_state[:2])
+                current_state = came_from[current_state]
+            path.append(start_state[:2])
+            return path[::-1]
+        
+        for dr, dc in directions:
+            next_state = (current_state[0] + dr, current_state[1] + dc, dr, dc)
+            if is_valid(next_state):
+                turn_cost = turn_angle(current_state[2], current_state[3], dr, dc)
+                total_turn_angle, total_length = best_cost[current_state]
+                new_total_turn_angle = total_turn_angle + turn_cost
+                new_total_length = total_length + 1
+                
+                if next_state not in best_cost or (new_total_turn_angle < best_cost[next_state][0] or 
+                                                   (new_total_turn_angle == best_cost[next_state][0] and 
+                                                    new_total_length < best_cost[next_state][1])):
+                    best_cost[next_state] = (new_total_turn_angle, new_total_length)
+                    came_from[next_state] = current_state
+                    heapq.heappush(open_set, (heuristic(next_state) + new_total_turn_angle + new_total_length, len(best_cost), next_state))
+    
+    return []
+```

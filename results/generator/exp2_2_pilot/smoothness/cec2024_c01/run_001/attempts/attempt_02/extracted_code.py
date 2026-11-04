@@ -1,0 +1,52 @@
+import numpy as np
+import heapq
+
+def plan(grid, start, goal):
+    rows, cols = grid.shape
+    if not (0 <= start[0] < rows and 0 <= start[1] < cols) or not (0 <= goal[0] < rows and 0 <= goal[1] < cols):
+        return []
+    
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    direction_to_angle = {tuple(d): np.arccos(np.clip(np.dot(d, d) / (np.linalg.norm(d) * np.linalg.norm(d)), -1, 1)) for d in directions}
+    
+    start_state = (*start, 0, 0)
+    goal_state = (*goal,)
+    
+    if grid[start] == 1 or grid[goal] == 1:
+        return []
+    
+    best_cost = {start_state: (0.0, 0)}
+    came_from = {}
+    counter = 0
+    
+    open_set = [(0.0, counter, start_state)]
+    counter += 1
+    
+    while open_set:
+        _, _, current_state = heapq.heappop(open_set)
+        
+        if current_state[:2] == goal_state:
+            path = []
+            while current_state in came_from:
+                path.append(current_state[:2])
+                current_state = came_from[current_state]
+            path.append(start_state[:2])
+            return path[::-1]
+        
+        for dr, dc in directions:
+            nr, nc = current_state[0] + dr, current_state[1] + dc
+            if 0 <= nr < rows and 0 <= nc < cols and grid[nr, nc] == 0:
+                new_state = (nr, nc, dr, dc)
+                turn_angle = direction_to_angle[(dr, dc)]
+                if current_state[2] != 0 and current_state[3] != 0:
+                    prev_dr, prev_dc = current_state[2], current_state[3]
+                    turn_angle += np.arccos(np.clip(np.dot((prev_dr, prev_dc), (dr, dc)) / (np.linalg.norm((prev_dr, prev_dc)) * np.linalg.norm((dr, dc))), -1, 1))
+                new_cost = best_cost[current_state][0] + turn_angle, best_cost[current_state][1] + np.sqrt(dr**2 + dc**2)
+                
+                if new_state not in best_cost or new_cost < best_cost[new_state]:
+                    best_cost[new_state] = new_cost
+                    came_from[new_state] = current_state
+                    heapq.heappush(open_set, (new_cost[0], counter, new_state))
+                    counter += 1
+    
+    return []

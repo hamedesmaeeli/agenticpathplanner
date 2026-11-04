@@ -172,8 +172,7 @@ def _write_csv(path: Path, rows: list[dict], empty_columns: tuple[str, ...] = ()
 def _summaries(rows: list[dict]) -> tuple[list[dict], list[dict]]:
     summary: list[dict] = []
     metrics = (
-        "mission_objective_value", "mission_optimum_value", "mission_objective_gap",
-        "mission_objective_ratio", "efficiency_ratio", "min_clearance",
+        "mission_objective_value", "efficiency_ratio", "min_clearance",
         "total_turn_angle_rad", "multi_weighted_cost",
         "generation_time_s", "planning_runtime_s",
     )
@@ -185,8 +184,6 @@ def _summaries(rows: list[dict]) -> tuple[list[dict], list[dict]]:
             "runs": len(group),
             "valid_paths": len(valid),
             "valid_path_rate": len(valid) / len(group) if group else 0.0,
-            "objective_optimal_paths": sum(bool(r.get("validation", {}).get("mission_objective_optimal")) for r in group),
-            "objective_optimal_rate": (sum(bool(r.get("validation", {}).get("mission_objective_optimal")) for r in group) / len(group)) if group else 0.0,
         }
         for metric in metrics:
             vals = []
@@ -299,7 +296,7 @@ def run_exp2(model: str, temperature: float, runs: int, output: Path,
                 code_hash = hashlib.sha256(extracted.encode("utf-8")).hexdigest() \
                     if extracted.strip() else ""
                 record = {
-                    "experiment": "exp2.1",
+                    "experiment": "exp2",
                     "mission": mission,
                     "map_id": map_id,
                     "difficulty": instance.difficulty,
@@ -355,7 +352,7 @@ def run_exp2(model: str, temperature: float, runs: int, output: Path,
     _write_json(output / "exp2_results.json", rows)
 
     report = [
-        "# Exp2.1 Pilot Report",
+        "# Exp2 Pilot Report",
         "",
         f"- Model: `{model}`",
         f"- Temperature: `{temperature}`",

@@ -1,0 +1,43 @@
+Map: cec2024_m01 (20x20; medium)
+Start: (1, 1); Goal: (18, 18)
+Obstacle ratio: 13.25%
+
+Grid (S=start, G=goal, .=free, #=obstacle):
+. . . . . . . . . . . . . . . . . . . .
+. S . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . # # # # # # # # # # # # # . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . . . . . . . . . . . . . # . . . . .
+. . . . . . # # # # # # # # # # # # . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . # # # # # # # # . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . . . # . . . . . . . . . . . . . . .
+. . . . . . . . # # # # # # # # # # . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . G .
+. . . . . . . . . . . . . . . . . . . .
+
+MISSION: MULTI-CRITERIA — EXACT LENGTH/CLEARANCE WEIGHTED COST
+
+For every free cell p, clearance[p] is minimum Euclidean distance to any
+obstacle-cell centre (infinity if no obstacles). For every move u->v:
+step = 1 for orthogonal, sqrt(2) for diagonal
+risk = 0 if clearance[v] is infinity else 1/(1+clearance[v])
+edge_cost = step * (1 + 0.5*risk)
+Minimize the SUM of edge_cost using Dijkstra. Use destination-cell clearance
+exactly as written and coefficient 0.5. Do not optimize length alone or
+clearance alone. Do not approximate clearance with a local window.
+
+Compute the clearance map safely from obstacle coordinates (vectorized or
+nested loops); never read grid[r+dr,c+dc] before checking both bounds. Use
+best_cost[(row,col)] and came_from[(row,col)]. Every edge cost is nonnegative,
+so Dijkstra is appropriate and requires no heuristic.
+
+Before returning code, check state tuple arity, full-state dictionary keys, cost accumulation, and all array bounds. Output only Python source.

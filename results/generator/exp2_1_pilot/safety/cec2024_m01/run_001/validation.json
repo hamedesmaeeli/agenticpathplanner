@@ -1,12 +1,12 @@
 {
   "mission": "safety",
   "valid": false,
-  "has_path": true,
+  "has_path": false,
   "starts_correctly": false,
-  "ends_correctly": true,
+  "ends_correctly": false,
   "coordinates_well_formed": true,
-  "in_bounds": true,
-  "obstacle_free": true,
+  "in_bounds": false,
+  "obstacle_free": false,
   "adjacent_steps": false,
   "corner_cutting_steps": 0,
   "path_length": 0.0,
@@ -29,7 +29,11 @@
   "mission_objective_ratio": 0.0,
   "mission_objective_optimal": false,
   "errors": [
+    "empty_path",
     "wrong_start",
+    "wrong_goal",
+    "out_of_bounds",
+    "obstacle_collision_or_invalid_cell",
     "non_adjacent_waypoints"
   ]
 }

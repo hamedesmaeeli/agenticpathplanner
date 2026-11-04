@@ -1,0 +1,14 @@
+{
+  "map_id": "cec2024_m01",
+  "mission": "smoothness",
+  "run": 1,
+  "start": [
+    1,
+    1
+  ],
+  "goal": [
+    18,
+    18
+  ],
+  "path": []
+}

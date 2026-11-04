@@ -1,5 +1,5 @@
 ﻿experiment,mission,map_id,difficulty,run,model,temperature,generation_time_s,planning_runtime_s,prompt_tokens,completion_tokens,response_error,code_extracted,compile_success,plan_fn_found,execution_success,compile_error,runtime_error,path_returned,code_sha256,extracted_code,case_dir,validation_mission,validation_valid,validation_has_path,validation_starts_correctly,validation_ends_correctly,validation_coordinates_well_formed,validation_in_bounds,validation_obstacle_free,validation_adjacent_steps,validation_corner_cutting_steps,validation_path_length,validation_euclidean_lower_bound,validation_plr_euclidean,validation_shortest_grid_path_length,validation_efficiency_ratio,validation_min_clearance,validation_mean_clearance,validation_safety_threshold,validation_safety_threshold_feasible,validation_safety_threshold_met,validation_total_turn_angle_rad,validation_turn_count,validation_multi_weighted_cost,validation_mission_objective_value,validation_mission_optimum_value,validation_mission_optimum_secondary_value,validation_mission_objective_gap,validation_mission_objective_ratio,validation_mission_objective_optimal,validation_errors
-exp2.1,efficiency,cec2024_s01,simple,1,qwen2.5-coder:7b,0.1,341.2946789000016,0.000645500000246102,699,488,,True,True,True,True,,,True,a73c5416061109d23277a8db97ed221504550f27c41a9c037ebad4f83348d87f,"import numpy as np
+exp2.1,efficiency,cec2024_s01,simple,1,qwen2.5-coder:7b,0.1,308.9222173000003,0.0006717999999636959,699,484,,True,True,True,True,,,True,386fd95730fc26556b0cae8426039f93b50b9961cfd42cfdc4481a5715a1ac2c,"import numpy as np
 import heapq
 
 def plan(grid, start, goal):
@@ -32,9 +32,7 @@ def plan(grid, start, goal):
 
         for dr, dc in directions:
             neighbor = (current[0] + dr, current[1] + dc)
-            if not (0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols):
-                continue
-            if grid[neighbor] == 1:
+            if not (0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols) or grid[neighbor] == 1:
                 continue
 
             step = np.sqrt(2) if dr != 0 and dc != 0 else 1.0
@@ -47,7 +45,7 @@ def plan(grid, start, goal):
                 heapq.heappush(open_set, (f_score, neighbor))
 
     return []",results\generator\exp2_1_pilot\efficiency\cec2024_s01\run_001,efficiency,True,True,True,True,True,True,True,True,0,9.899494936611665,9.899494936611665,1.0,9.899494936611667,0.9999999999999998,1.0,2.176776695296637,2.0,False,False,0.0,0,11.724452847995972,0.9999999999999998,1.0,9.899494936611667,-2.220446049250313e-16,0.9999999999999998,True,[]
-exp2.1,efficiency,cec2024_m01,medium,1,qwen2.5-coder:7b,0.1,285.43828580000263,0.0059478999974089675,1002,504,,True,True,True,True,,,True,a28ee8a212f2adcfc38121b4dc792c8e13b48bab12701ca9b1c22582a862fb3f,"import numpy as np
+exp2.1,efficiency,cec2024_m01,medium,1,qwen2.5-coder:7b,0.1,257.24041350000016,0.005787099999906786,1002,479,,True,True,True,True,,,True,95e02759bb9372d527c4374726bed36ae695cbbcddaecde120706ea01689e49c,"import numpy as np
 import heapq
 
 def plan(grid, start, goal):
@@ -60,15 +58,15 @@ def plan(grid, start, goal):
 
     rows, cols = grid.shape
     directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
-    heuristic = lambda r, c: max(abs(r - goal[0]), abs(c - goal[1])) + (np.sqrt(2) - 1) * min(abs(r - goal[0]), abs(c - goal[1]))
+    heuristic = lambda a, b: max(abs(a[0] - b[0]), abs(a[1] - b[1])) + (np.sqrt(2) - 1) * min(abs(a[0] - b[0]), abs(a[1] - b[1]))
 
     open_set = []
-    heapq.heappush(open_set, (heuristic(start[0], start[1]), 0, start))
+    heapq.heappush(open_set, (0, start))
     came_from = {}
     g_score = {start: 0}
 
     while open_set:
-        _, current_cost, current = heapq.heappop(open_set)
+        current = heapq.heappop(open_set)[1]
 
         if current == goal:
             path = []
@@ -80,22 +78,18 @@ def plan(grid, start, goal):
 
         for dr, dc in directions:
             neighbor = (current[0] + dr, current[1] + dc)
-            if not (0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols):
-                continue
-            if grid[neighbor] == 1:
-                continue
+            if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols and grid[neighbor] == 0:
+                step = np.sqrt(2) if dr != 0 and dc != 0 else 1.0
+                tentative_g_score = g_score[current] + step
 
-            step_cost = np.sqrt(2) if dr != 0 and dc != 0 else 1.0
-            tentative_g_score = g_score[current] + step_cost
-
-            if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
-                came_from[neighbor] = current
-                g_score[neighbor] = tentative_g_score
-                f_score = tentative_g_score + heuristic(neighbor[0], neighbor[1])
-                heapq.heappush(open_set, (f_score, tentative_g_score, neighbor))
+                if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative_g_score
+                    f_score = tentative_g_score + heuristic(neighbor, goal)
+                    heapq.heappush(open_set, (f_score, neighbor))
 
     return []",results\generator\exp2_1_pilot\efficiency\cec2024_m01\run_001,efficiency,True,True,True,True,True,True,True,True,0,26.970562748477143,24.041630560342615,1.1218275183450281,26.970562748477146,0.9999999999999999,1.0,1.649346812822336,2.0,True,False,4.712388980384691,6,32.45923645442019,0.9999999999999999,1.0,26.970562748477146,-1.1102230246251565e-16,0.9999999999999999,True,[]
-exp2.1,efficiency,cec2024_c01,complex,1,qwen2.5-coder:7b,0.1,411.64013299999715,0.04279270000188262,1502,514,,True,True,True,True,,,True,fe9e73fec823ef49499d5508d02e8a379b728077ccbe51efe911eec55d2846ea,"import numpy as np
+exp2.1,efficiency,cec2024_c01,complex,1,qwen2.5-coder:7b,0.1,347.0910156,0.0057564000003367255,1502,489,,True,True,True,True,,,True,b40eaa8d28cb438ad99f4675fb81859b8e2d56d05f6f433b287367f77a41d205,"import numpy as np
 import heapq
 
 def plan(grid, start, goal):
@@ -108,115 +102,44 @@ def plan(grid, start, goal):
 
     rows, cols = grid.shape
     directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
-    g_score = {start: 0}
-    f_score = {start: heuristic(start, goal)}
-    came_from = {}
+    heuristic = lambda p1, p2: max(abs(p1[0] - p2[0]), abs(p1[1] - p2[1])) + (np.sqrt(2) - 1) * min(abs(p1[0] - p2[0]), abs(p1[1] - p2[1]))
+
     open_set = []
-    heapq.heappush(open_set, (f_score[start], start))
+    heapq.heappush(open_set, (0, start))
+    came_from = {}
+    g_score = {start: 0}
 
     while open_set:
-        _, current = heapq.heappop(open_set)
+        current = heapq.heappop(open_set)[1]
 
         if current == goal:
-            path = reconstruct_path(came_from, current)
-            return path
+            path = []
+            while current in came_from:
+                path.append(current)
+                current = came_from[current]
+            path.append(start)
+            return path[::-1]
 
         for dr, dc in directions:
             neighbor = (current[0] + dr, current[1] + dc)
-            if not (0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols):
-                continue
-            if grid[neighbor] == 1:
-                continue
+            if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols and grid[neighbor] == 0:
+                step = np.sqrt(2) if dr != 0 and dc != 0 else 1.0
+                tentative_g_score = g_score[current] + step
 
-            step = np.hypot(dr, dc)
-            tentative_g_score = g_score[current] + step
+                if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative_g_score
+                    f_score = tentative_g_score + heuristic(neighbor, goal)
+                    heapq.heappush(open_set, (f_score, neighbor))
 
-            if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
-                came_from[neighbor] = current
-                g_score[neighbor] = tentative_g_score
-                f_score[neighbor] = g_score[neighbor] + heuristic(neighbor, goal)
-                heapq.heappush(open_set, (f_score[neighbor], neighbor))
-
-    return []
-
-def heuristic(a, b):
-    dx = abs(b[0] - a[0])
-    dy = abs(b[1] - a[1])
-    return max(dx, dy) + (np.sqrt(2) - 1) * min(dx, dy)
-
-def reconstruct_path(came_from, current):
-    total_path = [current]
-    while current in came_from:
-        current = came_from[current]
-        total_path.append(current)
-    return list(reversed(total_path))",results\generator\exp2_1_pilot\efficiency\cec2024_c01\run_001,efficiency,True,True,True,True,True,True,True,True,3,40.526911934581186,38.18376618407357,1.0613649722034213,40.52691193458118,1.0000000000000002,1.0,1.2355197205389237,2.0,False,False,10.99557428756428,14,49.97099625585855,1.0000000000000002,1.0,40.52691193458118,2.220446049250313e-16,1.0000000000000002,True,[]
-exp2.1,safety,cec2024_s01,simple,1,qwen2.5-coder:7b,0.1,313.85833999999886,0.00017769999976735562,777,566,,True,True,True,False,,NameError: name 'itertools' is not defined,False,c751fd2101e7c0274686f422a745d7d7eb8288e496aec06e281382fb1104a268,"import numpy as np
+    return []",results\generator\exp2_1_pilot\efficiency\cec2024_c01\run_001,efficiency,True,True,True,True,True,True,True,True,3,40.526911934581186,38.18376618407357,1.0613649722034213,40.52691193458118,1.0000000000000002,1.0,1.2355197205389237,2.0,False,False,10.99557428756428,14,49.97099625585855,1.0000000000000002,1.0,40.52691193458118,2.220446049250313e-16,1.0000000000000002,True,[]
+exp2.1,safety,cec2024_s01,simple,1,qwen2.5-coder:7b,0.1,284.0366490000001,0.00017519999983051093,777,684,,True,True,True,False,,NameError: name 'itertools' is not defined,False,5c14383441308fdc9fbac1280682af3a0376ee5225dffcc0ec064fe4e2c9e74b,"import numpy as np
 import heapq
 from math import sqrt
 
 def plan(grid, start, goal):
     rows, cols = grid.shape
     if not (0 <= start[0] < rows and 0 <= start[1] < cols) or not (0 <= goal[0] < rows and 0 <= goal[1] < cols):
-        return []
-
-    if grid[start] == 1 or grid[goal] == 1:
-        return []
-
-    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
-
-    def clearance(cell):
-        r, c = cell
-        min_dist = float('inf')
-        for i in range(rows):
-            for j in range(cols):
-                if grid[i, j] == 1:
-                    dist = sqrt((i - r) ** 2 + (j - c) ** 2)
-                    if dist < min_dist:
-                        min_dist = dist
-        return min_dist
-
-    start_clearance = clearance(start)
-    goal_clearance = clearance(goal)
-
-    if start_clearance == float('inf') or goal_clearance == float('inf'):
-        return []
-
-    best = {start: (start_clearance, 0)}
-    pq = [(-start_clearance, 0, start)]
-    counter = itertools.count()
-
-    while pq:
-        neg_bottleneck, length, u = heapq.heappop(pq)
-        bottleneck = -neg_bottleneck
-
-        if u == goal:
-            path = []
-            while u in best:
-                path.append(u)
-                u = best[u][1]
-            return path[::-1]
-
-        for dr, dc in directions:
-            v = (u[0] + dr, u[1] + dc)
-            if 0 <= v[0] < rows and 0 <= v[1] < cols and grid[v] == 0:
-                v_clearance = clearance(v)
-                candidate_bottleneck = min(bottleneck, v_clearance)
-                candidate_length = length + (sqrt(2) if abs(dr) == abs(dc) else 1)
-
-                if v not in best or (candidate_bottleneck > best[v][0] or 
-                                      (candidate_bottleneck == best[v][0] and candidate_length < best[v][1])):
-                    best[v] = (candidate_bottleneck, candidate_length)
-                    heapq.heappush(pq, (-candidate_bottleneck, candidate_length, v, next(counter)))
-
-    return []",results\generator\exp2_1_pilot\safety\cec2024_s01\run_001,safety,False,False,False,False,True,False,False,False,0,0.0,9.899494936611665,Infinity,9.899494936611667,Infinity,0.0,0.0,2.0,False,False,Infinity,0,Infinity,0.0,1.0,9.899494936611667,1.0,0.0,False,"[""empty_path"", ""wrong_start"", ""wrong_goal"", ""out_of_bounds"", ""obstacle_collision_or_invalid_cell"", ""non_adjacent_waypoints""]"
-exp2.1,safety,cec2024_m01,medium,1,qwen2.5-coder:7b,0.1,364.9096328000014,0.5121750999969663,1080,637,,True,True,True,True,,,True,ff5dca7ba9bc4dc85533964f5ce5ea7c7d9c0997d640f12a2e17ced1912231bb,"import numpy as np
-import heapq
-from math import sqrt
-
-def plan(grid, start, goal):
-    rows, cols = grid.shape
-    if not (0 <= start[0] < rows and 0 <= start[1] < cols and 
-            0 <= goal[0] < rows and 0 <= goal[1] < cols):
         return []
 
     directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
@@ -240,37 +163,39 @@ def plan(grid, start, goal):
 
     best = {(start[0], start[1]): (start_clearance, 0)}
     pq = [(-start_clearance, 0, start[0], start[1])]
-    counter = 0
+    counter = itertools.count()
 
     while pq:
-        bottleneck, length, r, c = heapq.heappop(pq)
-        bottleneck = -bottleneck
+        neg_bottleneck, length, r, c = heapq.heappop(pq)
+        bottleneck = -neg_bottleneck
 
         if (r, c) == goal:
             path = [(r, c)]
             while (r, c) in best and best[(r, c)][1] < length:
+                prev_bottleneck, _ = best[(r, c)]
                 for dr, dc in directions:
                     nr, nc = r + dr, c + dc
                     if 0 <= nr < rows and 0 <= nc < cols and grid[nr, nc] == 0:
-                        path.append((nr, nc))
-                        (r, c) = (nr, nc)
+                        if (nr, nc) in best and best[(nr, nc)][1] == length - 1:
+                            path.append((nr, nc))
+                            r, c = nr, nc
+                            break
             return list(reversed(path))
 
         for dr, dc in directions:
             nr, nc = r + dr, c + dc
             if 0 <= nr < rows and 0 <= nc < cols and grid[nr, nc] == 0:
-                new_bottleneck = min(bottleneck, clearance((nr, nc)))
-                new_length = length + (1 if abs(dr) + abs(dc) == 2 else sqrt(2))
-                new_state = (nr, nc)
+                new_clearance = clearance((nr, nc))
+                candidate_bottleneck = min(bottleneck, new_clearance)
+                candidate_length = length + (1 if dr == 0 or dc == 0 else sqrt(2))
 
-                if new_state not in best or (new_bottleneck > best[new_state][0] or 
-                                            (new_bottleneck == best[new_state][0] and new_length < best[new_state][1])):
-                    best[new_state] = (new_bottleneck, new_length)
-                    heapq.heappush(pq, (-new_bottleneck, new_length, nr, nc))
-                    counter += 1
+                if (nr, nc) not in best or candidate_bottleneck > best[(nr, nc)][0] or \
+                   (candidate_bottleneck == best[(nr, nc)][0] and candidate_length < best[(nr, nc)][1]):
+                    best[(nr, nc)] = (candidate_bottleneck, candidate_length)
+                    heapq.heappush(pq, (-candidate_bottleneck, candidate_length, nr, nc))
 
-    return []",results\generator\exp2_1_pilot\safety\cec2024_m01\run_001,safety,False,True,False,True,True,True,True,False,0,0.0,24.041630560342615,Infinity,26.970562748477146,Infinity,0.0,0.0,2.0,True,False,Infinity,0,Infinity,0.0,2.0,33.071067811865476,2.0,0.0,False,"[""wrong_start"", ""non_adjacent_waypoints""]"
-exp2.1,safety,cec2024_c01,complex,1,qwen2.5-coder:7b,0.1,436.49981729999854,0.0017728000020724721,1580,564,,True,True,True,False,,NameError: name 'itertools' is not defined,False,040cb6698591fdd5cbd06ba645ef4794489d7401f52ceec4dcb8f630650719d5,"import numpy as np
+    return []",results\generator\exp2_1_pilot\safety\cec2024_s01\run_001,safety,False,False,False,False,True,False,False,False,0,0.0,9.899494936611665,Infinity,9.899494936611667,Infinity,0.0,0.0,2.0,False,False,Infinity,0,Infinity,0.0,1.0,9.899494936611667,1.0,0.0,False,"[""empty_path"", ""wrong_start"", ""wrong_goal"", ""out_of_bounds"", ""obstacle_collision_or_invalid_cell"", ""non_adjacent_waypoints""]"
+exp2.1,safety,cec2024_m01,medium,1,qwen2.5-coder:7b,0.1,246.0960273999999,0.04317639999999301,1080,558,,True,True,True,False,,NameError: name 'itertools' is not defined,False,ceb74590533a539de978734c22ffb18f54f3538ee91a728df340be92c58e31c2,"import numpy as np
 import heapq
 from math import sqrt
 
@@ -279,27 +204,21 @@ def plan(grid, start, goal):
     if not (0 <= start[0] < rows and 0 <= start[1] < cols) or not (0 <= goal[0] < rows and 0 <= goal[1] < cols):
         return []
 
-    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    # Calculate clearance for each cell
+    clearance = np.full_like(grid, float('inf'))
+    obstacles = np.argwhere(grid == 1)
+    for r, c in obstacles:
+        clearance[r, c] = 0
+        for dr in range(-1, 2):
+            for dc in range(-1, 2):
+                if dr != 0 or dc != 0:
+                    nr, nc = r + dr, c + dc
+                    if 0 <= nr < rows and 0 <= nc < cols:
+                        clearance[nr, nc] = min(clearance[nr, nc], sqrt(dr**2 + dc**2))
 
-    def clearance(cell):
-        r, c = cell
-        min_dist = float('inf')
-        for orow in range(rows):
-            for ocol in range(cols):
-                if grid[orow, ocol] == 1:
-                    dist = sqrt((r - orow)**2 + (c - ocol)**2)
-                    if dist < min_dist:
-                        min_dist = dist
-        return min_dist
-
-    start_clearance = clearance(start)
-    goal_clearance = clearance(goal)
-
-    if start_clearance == float('inf') or goal_clearance == float('inf'):
-        return []
-
-    best = {(start[0], start[1]): (start_clearance, 0)}
-    pq = [(-start_clearance, 0, 0, start)]
+    # Initialize best dictionary with start state
+    best = {start: (clearance[start[0], start[1]], 0)}
+    pq = [(-clearance[start[0], start[1]], 0, 0, start)]
     counter = itertools.count()
 
     while pq:
@@ -313,20 +232,71 @@ def plan(grid, start, goal):
                 u = best[u][1]
             return path[::-1]
 
+        for dr in range(-1, 2):
+            for dc in range(-1, 2):
+                if dr != 0 or dc != 0:
+                    v = (u[0] + dr, u[1] + dc)
+                    if 0 <= v[0] < rows and 0 <= v[1] < cols and grid[v[0], v[1]] == 0:
+                        new_bottleneck = min(bottleneck, clearance[v[0], v[1]])
+                        new_length = length + (sqrt(2) if dr != 0 and dc != 0 else 1)
+                        if v not in best or (new_bottleneck > best[v][0] or (new_bottleneck == best[v][0] and new_length < best[v][1])):
+                            best[v] = (new_bottleneck, u)
+                            heapq.heappush(pq, (-new_bottleneck, new_length, next(counter), v))
+
+    return []",results\generator\exp2_1_pilot\safety\cec2024_m01\run_001,safety,False,False,False,False,True,False,False,False,0,0.0,24.041630560342615,Infinity,26.970562748477146,Infinity,0.0,0.0,2.0,True,False,Infinity,0,Infinity,0.0,2.0,33.071067811865476,2.0,0.0,False,"[""empty_path"", ""wrong_start"", ""wrong_goal"", ""out_of_bounds"", ""obstacle_collision_or_invalid_cell"", ""non_adjacent_waypoints""]"
+exp2.1,safety,cec2024_c01,complex,1,qwen2.5-coder:7b,0.1,272.8029686,0.015945300000112184,1580,567,,True,True,True,False,,NameError: name 'itertools' is not defined,False,a8be6a5c9777783510195665847f15a02054a79c28074e801d5619d0f0484b78,"import heapq
+import math
+import numpy as np
+
+def plan(grid, start, goal):
+    rows, cols = grid.shape
+    if not (0 <= start[0] < rows and 0 <= start[1] < cols) or not (0 <= goal[0] < rows and 0 <= goal[1] < cols):
+        return []
+
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    clearance = np.zeros_like(grid, dtype=float)
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r, c] == 1:
+                continue
+            min_dist = float('inf')
+            for orow in range(max(0, r-2), min(rows, r+3)):
+                for ocol in range(max(0, c-2), min(cols, c+3)):
+                    if grid[orow, ocol] == 1:
+                        dist = math.sqrt((r-orow)**2 + (c-ocol)**2)
+                        if dist < min_dist:
+                            min_dist = dist
+            clearance[r, c] = min_dist
+
+    if clearance[start] == float('inf') or clearance[goal] == float('inf'):
+        return []
+
+    best = {start: (clearance[start], 0)}
+    pq = [(-clearance[start], 0, start)]
+    counter = itertools.count()
+
+    while pq:
+        neg_bottleneck, length, u = heapq.heappop(pq)
+        bottleneck = -neg_bottleneck
+
+        if u == goal:
+            path = []
+            while u in best:
+                path.append(u)
+                u = best[u][1]
+            return path[::-1]
+
         for dr, dc in directions:
             v = (u[0] + dr, u[1] + dc)
-            if 0 <= v[0] < rows and 0 <= v[1] < cols and grid[v[0], v[1]] == 0:
-                v_clearance = clearance(v)
-                candidate_bottleneck = min(bottleneck, v_clearance)
-                candidate_length = length + (sqrt(2) if abs(dr) == abs(dc) else 1)
-
-                if v not in best or (candidate_bottleneck > best[v][0] or 
-                                      (candidate_bottleneck == best[v][0] and candidate_length < best[v][1])):
-                    best[v] = (candidate_bottleneck, candidate_length)
-                    heapq.heappush(pq, (-candidate_bottleneck, candidate_length, next(counter), v))
+            if 0 <= v[0] < rows and 0 <= v[1] < cols and grid[v] == 0:
+                new_bottleneck = min(bottleneck, clearance[v])
+                new_length = length + math.sqrt(dr**2 + dc**2)
+                if v not in best or (new_bottleneck > best[v][0] or (new_bottleneck == best[v][0] and new_length < best[v][1])):
+                    best[v] = (new_bottleneck, new_length)
+                    heapq.heappush(pq, (-new_bottleneck, new_length, v, next(counter)))
 
     return []",results\generator\exp2_1_pilot\safety\cec2024_c01\run_001,safety,False,False,False,False,True,False,False,False,0,0.0,38.18376618407357,Infinity,40.52691193458118,Infinity,0.0,0.0,2.0,False,False,Infinity,0,Infinity,0.0,1.0,40.52691193458118,1.0,0.0,False,"[""empty_path"", ""wrong_start"", ""wrong_goal"", ""out_of_bounds"", ""obstacle_collision_or_invalid_cell"", ""non_adjacent_waypoints""]"
-exp2.1,smoothness,cec2024_s01,simple,1,qwen2.5-coder:7b,0.1,336.71329259999766,6.829999620094895e-05,799,579,,True,True,True,False,,ZeroDivisionError: float division by zero,False,f8dd547cf26e489edd127b369ed5ef1f57fa27f6b589ca0897c8381972fb05cf,"import numpy as np
+exp2.1,smoothness,cec2024_s01,simple,1,qwen2.5-coder:7b,0.1,239.58097009999983,3.910000032192329e-05,799,581,,True,True,True,False,,ZeroDivisionError: float division by zero,False,7f7de5e94f1276f78c97236be902d0a6912b0c943fddcc3fcefdb7daffc02bc6,"import numpy as np
 import heapq
 from math import acos, cos, pi, sqrt
 
@@ -366,7 +336,7 @@ def plan(grid, start, goal):
             if 0 <= next_row < grid.shape[0] and 0 <= next_col < grid.shape[1] and grid[next_row, next_col] == 0:
                 next_state = (next_row, next_col, dr, dc)
                 turn_angle = 0 if prev_dr is None else acos(max(-1, min(1, (prev_dr * dr + prev_dc * dc) / (sqrt(prev_dr**2 + prev_dc**2) * sqrt(dr**2 + dc**2)))))
-                new_cost = best_cost[current_state][0] + turn_angle, best_cost[current_state][1] + 1 if prev_dr is None or (prev_dr != dr and prev_dc != dc) else 0
+                new_cost = best_cost[current_state][0] + turn_angle, best_cost[current_state][1] + 1 if prev_dr is None or (prev_dr, prev_dc) != (dr, dc) else 0
                 if next_state not in best_cost or new_cost < best_cost[next_state]:
                     best_cost[next_state] = new_cost
                     came_from[next_state] = current_state
@@ -374,3 +344,327 @@ def plan(grid, start, goal):
                     counter += 1
 
     return []",results\generator\exp2_1_pilot\smoothness\cec2024_s01\run_001,smoothness,False,False,False,False,True,False,False,False,0,0.0,9.899494936611665,Infinity,9.899494936611667,Infinity,0.0,0.0,2.0,False,False,Infinity,0,Infinity,Infinity,0.0,9.899494936611667,Infinity,NaN,False,"[""empty_path"", ""wrong_start"", ""wrong_goal"", ""out_of_bounds"", ""obstacle_collision_or_invalid_cell"", ""non_adjacent_waypoints""]"
+exp2.1,smoothness,cec2024_m01,medium,1,qwen2.5-coder:7b,0.1,279.38786979999986,2.2600000193051528e-05,1102,629,,True,True,True,False,,NameError: name 'itertools' is not defined,False,9f7a8e75fc12f50d4d1af25e5e796f333c2ef7206fd359dbb17f2b4c91fa397e,"import numpy as np
+import heapq
+
+def plan(grid, start, goal):
+    if not (0 <= start[0] < grid.shape[0] and 0 <= start[1] < grid.shape[1]):
+        return []
+    if not (0 <= goal[0] < grid.shape[0] and 0 <= goal[1] < grid.shape[1]):
+        return []
+    if grid[start] == 1 or grid[goal] == 1:
+        return []
+
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    direction_names = ['NW', 'N', 'NE', 'W', 'E', 'SW', 'S', 'SE']
+
+    start_state = (start[0], start[1], 0, 0)
+    goal_state = (goal[0], goal[1])
+
+    best_cost = {start_state: (0.0, 0.0)}
+    came_from = {}
+    open_set = [(0.0, start_state)]
+    counter = itertools.count()
+
+    while open_set:
+        _, current_state = heapq.heappop(open_set)
+
+        if current_state[:2] == goal_state:
+            path = []
+            while current_state in came_from:
+                path.append(current_state[:2])
+                current_state = came_from[current_state]
+            path.append(start_state[:2])
+            path.reverse()
+            return path
+
+        for dr, dc in directions:
+            nr, nc = current_state[0] + dr, current_state[1] + dc
+            if 0 <= nr < grid.shape[0] and 0 <= nc < grid.shape[1] and grid[nr, nc] == 0:
+                new_direction = (dr, dc)
+                prev_direction = (current_state[2], current_state[3])
+
+                turn_angle = 0.0
+                if prev_direction != (0, 0):
+                    cos_theta = np.clip(np.dot(prev_direction, new_direction) / 
+                                        (np.linalg.norm(prev_direction) * np.linalg.norm(new_direction)), -1, 1)
+                    turn_angle = np.arccos(cos_theta)
+
+                new_cost = best_cost[current_state][0] + turn_angle
+                if (nr, nc, dr, dc) not in best_cost or new_cost < best_cost[(nr, nc, dr, dc)][0]:
+                    best_cost[(nr, nc, dr, dc)] = (new_cost, best_cost[current_state][1] + np.sqrt(dr**2 + dc**2))
+                    heapq.heappush(open_set, (best_cost[(nr, nc, dr, dc)][0], (nr, nc, dr, dc), next(counter)))
+                    came_from[(nr, nc, dr, dc)] = current_state
+
+    return []",results\generator\exp2_1_pilot\smoothness\cec2024_m01\run_001,smoothness,False,False,False,False,True,False,False,False,0,0.0,24.041630560342615,Infinity,26.970562748477146,Infinity,0.0,0.0,2.0,True,False,Infinity,0,Infinity,Infinity,1.5707963267948966,34.0,Infinity,Infinity,False,"[""empty_path"", ""wrong_start"", ""wrong_goal"", ""out_of_bounds"", ""obstacle_collision_or_invalid_cell"", ""non_adjacent_waypoints""]"
+exp2.1,smoothness,cec2024_c01,complex,1,qwen2.5-coder:7b,0.1,1232.5599272,0.0,1602,2048,,True,False,False,False,"SyntaxError: invalid syntax (<llm_generated_plan>, line 1)",,False,2f79be45ebf8d474ea371c1930bbaa9f46106011ee537fea9f1473853ce04c13,"```python
+import numpy as np
+import heapq
+
+def plan(grid, start, goal):
+    if not (0 <= start[0] < grid.shape[0] and 0 <= start[1] < grid.shape[1]):
+        return []
+    if not (0 <= goal[0] < grid.shape[0] and 0 <= goal[1] < grid.shape[1]):
+        return []
+    if grid[start] == 1 or grid[goal] == 1:
+        return []
+
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    direction_to_index = {(dr, dc): i for i, (dr, dc) in enumerate(directions)}
+    index_to_direction = {i: (dr, dc) for i, (dr, dc) in enumerate(directions)}
+
+    start_state = (*start, 0, 0)
+    goal_state = (*goal, None, None)
+
+    best_cost = {start_state: (0.0, 0.0)}
+    came_from = {}
+    open_set = [(0.0, start_state)]
+
+    while open_set:
+        _, current_state = heapq.heappop(open_set)
+        if current_state == goal_state:
+            break
+
+        for dr, dc in directions:
+            nr, nc = current_state[0] + dr, current_state[1] + dc
+            if 0 <= nr < grid.shape[0] and 0 <= nc < grid.shape[1] and grid[nr, nc] == 0:
+                new_state = (nr, nc, dr, dc)
+                turn_angle = 0.0
+                if current_state[2] is not None:
+                    prev_dr, prev_dc = current_state[2], current_state[3]
+                    dot_product = prev_dr * dr + prev_dc * dc
+                    norm_prev = np.sqrt(prev_dr**2 + prev_dc**2)
+                    norm_new = np.sqrt(dr**2 + dc**2)
+                    cos_angle = max(-1.0, min(1.0, dot_product / (norm_prev * norm_new)))
+                    turn_angle = np.arccos(cos_angle)
+
+                new_cost = best_cost[current_state][0] + turn_angle, best_cost[current_state][1] + 1
+                if new_state not in best_cost or new_cost < best_cost[new_state]:
+                    best_cost[new_state] = new_cost
+                    came_from[new_state] = current_state
+                    heapq.heappush(open_set, (new_cost[0], new_state))
+
+    path = []
+    current_state = goal_state
+    while current_state in came_from:
+        path.append(current_state[:2])
+        current_state = came_from[current_state]
+    if path and path[-1] == start:
+        path.append(start)
+        return path[::-1]
+    else:
+        return []
+
+# Example usage:
+grid = np.array([
+    [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0",results\generator\exp2_1_pilot\smoothness\cec2024_c01\run_001,smoothness,False,False,False,False,True,False,False,False,0,0.0,38.18376618407357,Infinity,40.52691193458118,Infinity,0.0,0.0,2.0,False,False,Infinity,0,Infinity,Infinity,3.926990816987242,44.04163056034261,Infinity,Infinity,False,"[""empty_path"", ""wrong_start"", ""wrong_goal"", ""out_of_bounds"", ""obstacle_collision_or_invalid_cell"", ""non_adjacent_waypoints""]"
+exp2.1,multi,cec2024_s01,simple,1,qwen2.5-coder:7b,0.1,258.37195359999987,0.0016594999997323612,760,640,,True,True,True,False,,NameError: name 'itertools' is not defined,False,61ab786da3e2afab16880258aaabfcfb3da3a4cdefc9a70e63c25e54c94e3fa7,"import numpy as np
+import heapq
+
+def plan(grid, start, goal):
+    if not (0 <= start[0] < grid.shape[0] and 0 <= start[1] < grid.shape[1]):
+        return []
+    if not (0 <= goal[0] < grid.shape[0] and 0 <= goal[1] < grid.shape[1]):
+        return []
+
+    rows, cols = grid.shape
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+
+    def compute_clearance(grid):
+        obstacles = np.argwhere(grid == 1)
+        clearance_map = np.full_like(grid, float('inf'))
+
+        for obstacle in obstacles:
+            x, y = obstacle
+            for dx in range(-2, 3):
+                for dy in range(-2, 3):
+                    if 0 <= x + dx < rows and 0 <= y + dy < cols:
+                        clearance_map[x + dx, y + dy] = min(clearance_map[x + dx, y + dy], np.sqrt((x - obstacle[0])**2 + (y - obstacle[1])**2))
+
+        return clearance_map
+
+    clearance_map = compute_clearance(grid)
+
+    start_state = (start[0], start[1])
+    goal_state = (goal[0], goal[1])
+
+    if grid[start_state] == 1 or grid[goal_state] == 1:
+        return []
+
+    best_cost = {start_state: 0}
+    came_from = {}
+    counter = itertools.count()
+
+    open_set = [(0, next(counter), start_state)]
+
+    while open_set:
+        _, _, current = heapq.heappop(open_set)
+
+        if current == goal_state:
+            path = []
+            while current in came_from:
+                path.append(current)
+                current = came_from[current]
+            path.append(start_state)
+            path.reverse()
+            return path
+
+        for dr, dc in directions:
+            neighbor = (current[0] + dr, current[1] + dc)
+
+            if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols and grid[neighbor] == 0:
+                step_cost = 1 if abs(dr) + abs(dc) == 1 else np.sqrt(2)
+                risk = 0 if clearance_map[neighbor] == float('inf') else 1 / (1 + clearance_map[neighbor])
+                edge_cost = step_cost * (1 + 0.5 * risk)
+
+                new_cost = best_cost[current] + edge_cost
+
+                if neighbor not in best_cost or new_cost < best_cost[neighbor]:
+                    best_cost[neighbor] = new_cost
+                    came_from[neighbor] = current
+                    heapq.heappush(open_set, (new_cost, next(counter), neighbor))
+
+    return []",results\generator\exp2_1_pilot\multi\cec2024_s01\run_001,multi,False,False,False,False,True,False,False,False,0,0.0,9.899494936611665,Infinity,9.899494936611667,Infinity,0.0,0.0,2.0,False,False,Infinity,0,Infinity,Infinity,11.724452847995972,NaN,Infinity,Infinity,False,"[""empty_path"", ""wrong_start"", ""wrong_goal"", ""out_of_bounds"", ""obstacle_collision_or_invalid_cell"", ""non_adjacent_waypoints""]"
+exp2.1,multi,cec2024_m01,medium,1,qwen2.5-coder:7b,0.1,324.5240380999994,0.04426770000009128,1063,732,,True,True,True,True,,,True,bc423bc11a9a4f1c2dd3c0c9c267b2495ff211145c2e217eb94436f3180d6271,"import numpy as np
+import heapq
+
+def plan(grid, start, goal):
+    if not (0 <= start[0] < grid.shape[0] and 0 <= start[1] < grid.shape[1]):
+        return []
+    if not (0 <= goal[0] < grid.shape[0] and 0 <= goal[1] < grid.shape[1]):
+        return []
+
+    rows, cols = grid.shape
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+
+    def calculate_clearance(obstacles):
+        clearance_map = np.full_like(grid, float('inf'))
+        for obstacle in obstacles:
+            r, c = obstacle
+            for dr in range(-2, 3):
+                for dc in range(-2, 3):
+                    if (dr, dc) != (0, 0):
+                        nr, nc = r + dr, c + dc
+                        if 0 <= nr < rows and 0 <= nc < cols:
+                            clearance_map[nr, nc] = min(clearance_map[nr, nc], np.sqrt(dr**2 + dc**2))
+        return clearance_map
+
+    obstacles = [(i, j) for i in range(rows) for j in range(cols) if grid[i, j] == 1]
+    clearance_map = calculate_clearance(obstacles)
+
+    start_state = (start[0], start[1])
+    goal_state = (goal[0], goal[1])
+
+    if clearance_map[start_state[0], start_state[1]] == float('inf') or clearance_map[goal_state[0], goal_state[1]] == float('inf'):
+        return []
+
+    best_cost = {start_state: 0}
+    came_from = {}
+    counter = 0
+
+    open_set = [(0, counter, start_state)]
+
+    while open_set:
+        current_cost, _, current_state = heapq.heappop(open_set)
+
+        if current_state == goal_state:
+            path = []
+            while current_state in came_from:
+                path.append(current_state)
+                current_state = came_from[current_state]
+            path.append(start_state)
+            path.reverse()
+            return path
+
+        for dr, dc in directions:
+            neighbor = (current_state[0] + dr, current_state[1] + dc)
+            if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols and grid[neighbor[0], neighbor[1]] == 0:
+                step_cost = 1 if (dr, dc) in [(0, 1), (0, -1), (1, 0), (-1, 0)] else np.sqrt(2)
+                risk = 0 if clearance_map[neighbor[0], neighbor[1]] == float('inf') else 1 / (1 + clearance_map[neighbor[0], neighbor[1]])
+                edge_cost = step_cost * (1 + 0.5 * risk)
+                new_cost = current_cost + edge_cost
+
+                if neighbor not in best_cost or new_cost < best_cost[neighbor]:
+                    best_cost[neighbor] = new_cost
+                    counter += 1
+                    heapq.heappush(open_set, (new_cost, counter, neighbor))
+                    came_from[neighbor] = current_state
+
+    return []",results\generator\exp2_1_pilot\multi\cec2024_m01\run_001,multi,True,True,True,True,True,True,True,True,0,26.970562748477143,24.041630560342615,1.1218275183450281,26.970562748477146,0.9999999999999999,1.0,1.72603950945278,2.0,True,False,4.712388980384691,6,32.38214979843309,32.38214979843309,31.898816465099763,NaN,0.4833333333333272,1.0151520773149103,False,[]
+exp2.1,multi,cec2024_c01,complex,1,qwen2.5-coder:7b,0.1,365.2520371999999,0.04330370000025141,1563,681,,True,True,True,False,,NameError: name 'itertools' is not defined,False,4143bedc0f49377df59e3025750bc82d4c532d3bf9244233a0fa8ed536ed0438,"import numpy as np
+import heapq
+
+def plan(grid, start, goal):
+    if not (0 <= start[0] < grid.shape[0] and 0 <= start[1] < grid.shape[1]):
+        return []
+    if not (0 <= goal[0] < grid.shape[0] and 0 <= goal[1] < grid.shape[1]):
+        return []
+
+    rows, cols = grid.shape
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+
+    def calculate_clearance(obstacles):
+        clearance_map = np.full_like(grid, float('inf'))
+        for r, c in obstacles:
+            for dr in range(-2, 3):
+                for dc in range(-2, 3):
+                    if 0 <= r + dr < rows and 0 <= c + dc < cols:
+                        clearance_map[r + dr, c + dc] = min(clearance_map[r + dr, c + dc], np.sqrt(dr**2 + dc**2))
+        return clearance_map
+
+    obstacles = [(r, c) for r in range(rows) for c in range(cols) if grid[r, c] == 1]
+    clearance_map = calculate_clearance(obstacles)
+
+    start_state = (start[0], start[1])
+    goal_state = (goal[0], goal[1])
+
+    if start_state == goal_state:
+        return [start_state]
+
+    best_cost = {start_state: 0}
+    came_from = {}
+    counter = itertools.count()
+
+    open_set = []
+    heapq.heappush(open_set, (0, next(counter), start_state))
+
+    while open_set:
+        _, _, current = heapq.heappop(open_set)
+
+        if current == goal_state:
+            path = []
+            while current in came_from:
+                path.append(current)
+                current = came_from[current]
+            path.append(start_state)
+            return path[::-1]
+
+        for dr, dc in directions:
+            neighbor = (current[0] + dr, current[1] + dc)
+            if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols and grid[neighbor[0], neighbor[1]] == 0:
+                step_cost = 1 if (dr, dc) in [(-1, 0), (1, 0), (0, -1), (0, 1)] else np.sqrt(2)
+                risk = 0 if clearance_map[neighbor[0], neighbor[1]] == float('inf') else 1 / (1 + clearance_map[neighbor[0], neighbor[1]])
+                edge_cost = step_cost * (1 + 0.5 * risk)
+                new_cost = best_cost[current] + edge_cost
+
+                if neighbor not in best_cost or new_cost < best_cost[neighbor]:
+                    best_cost[neighbor] = new_cost
+                    came_from[neighbor] = current
+                    heapq.heappush(open_set, (new_cost, next(counter), neighbor))
+
+    return []",results\generator\exp2_1_pilot\multi\cec2024_c01\run_001,multi,False,False,False,False,True,False,False,False,0,0.0,38.18376618407357,Infinity,40.52691193458118,Infinity,0.0,0.0,2.0,False,False,Infinity,0,Infinity,Infinity,49.7836661276589,NaN,Infinity,Infinity,False,"[""empty_path"", ""wrong_start"", ""wrong_goal"", ""out_of_bounds"", ""obstacle_collision_or_invalid_cell"", ""non_adjacent_waypoints""]"

@@ -1,0 +1,56 @@
+```python
+import numpy as np
+import heapq
+
+def plan(grid, start, goal):
+    if not (0 <= start[0] < grid.shape[0] and 0 <= start[1] < grid.shape[1]):
+        return []
+    if not (0 <= goal[0] < grid.shape[0] and 0 <= goal[1] < grid.shape[1]):
+        return []
+    if grid[start] == 1 or grid[goal] == 1:
+        return []
+
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    
+    def clearance(cell):
+        r, c = cell
+        min_dist = float('inf')
+        for orow in range(grid.shape[0]):
+            for ocol in range(grid.shape[1]):
+                if grid[orow, ocol] == 1:
+                    dist = np.sqrt((r - orow)**2 + (c - ocol)**2)
+                    min_dist = min(min_dist, dist)
+        return min_dist
+    
+    start_clearance = clearance(start)
+    goal_clearance = clearance(goal)
+    
+    if start_clearance < 2.0 or goal_clearance < 2.0:
+        return []
+    
+    best = {(start[0], start[1]): (start_clearance, 0)}
+    pq = [(-start_clearance, 0, start)]
+    counter = 0
+    
+    while pq:
+        bottleneck, length, u = heapq.heappop(pq)
+        r, c = u
+        if u == goal:
+            path = []
+            while u in best:
+                path.append(u)
+                u = best[u][1]
+            return path[::-1]
+        
+        for dr, dc in directions:
+            v = (r + dr, c + dc)
+            if 0 <= v[0] < grid.shape[0] and 0 <= v[1] < grid.shape[1] and grid[v] == 0:
+                new_bottleneck = min(best[u][0], clearance(v))
+                new_length = length + (np.sqrt(2) if abs(dr) == abs(dc) else 1)
+                if v not in best or (new_bottleneck, new_length) < best[v]:
+                    best[v] = (new_bottleneck, new_length)
+                    counter += 1
+                    heapq.heappush(pq, (-new_bottleneck, new_length, v))
+    
+    return []
+```

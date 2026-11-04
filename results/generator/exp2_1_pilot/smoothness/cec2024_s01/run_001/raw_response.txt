@@ -39,7 +39,7 @@ def plan(grid, start, goal):
             if 0 <= next_row < grid.shape[0] and 0 <= next_col < grid.shape[1] and grid[next_row, next_col] == 0:
                 next_state = (next_row, next_col, dr, dc)
                 turn_angle = 0 if prev_dr is None else acos(max(-1, min(1, (prev_dr * dr + prev_dc * dc) / (sqrt(prev_dr**2 + prev_dc**2) * sqrt(dr**2 + dc**2)))))
-                new_cost = best_cost[current_state][0] + turn_angle, best_cost[current_state][1] + 1 if prev_dr is None or (prev_dr != dr and prev_dc != dc) else 0
+                new_cost = best_cost[current_state][0] + turn_angle, best_cost[current_state][1] + 1 if prev_dr is None or (prev_dr, prev_dc) != (dr, dc) else 0
                 if next_state not in best_cost or new_cost < best_cost[next_state]:
                     best_cost[next_state] = new_cost
                     came_from[next_state] = current_state

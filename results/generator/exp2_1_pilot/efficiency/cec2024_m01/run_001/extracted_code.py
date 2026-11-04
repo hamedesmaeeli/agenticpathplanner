@@ -11,15 +11,15 @@ def plan(grid, start, goal):
 
     rows, cols = grid.shape
     directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
-    heuristic = lambda r, c: max(abs(r - goal[0]), abs(c - goal[1])) + (np.sqrt(2) - 1) * min(abs(r - goal[0]), abs(c - goal[1]))
+    heuristic = lambda a, b: max(abs(a[0] - b[0]), abs(a[1] - b[1])) + (np.sqrt(2) - 1) * min(abs(a[0] - b[0]), abs(a[1] - b[1]))
 
     open_set = []
-    heapq.heappush(open_set, (heuristic(start[0], start[1]), 0, start))
+    heapq.heappush(open_set, (0, start))
     came_from = {}
     g_score = {start: 0}
 
     while open_set:
-        _, current_cost, current = heapq.heappop(open_set)
+        current = heapq.heappop(open_set)[1]
 
         if current == goal:
             path = []
@@ -31,18 +31,14 @@ def plan(grid, start, goal):
 
         for dr, dc in directions:
             neighbor = (current[0] + dr, current[1] + dc)
-            if not (0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols):
-                continue
-            if grid[neighbor] == 1:
-                continue
+            if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols and grid[neighbor] == 0:
+                step = np.sqrt(2) if dr != 0 and dc != 0 else 1.0
+                tentative_g_score = g_score[current] + step
 
-            step_cost = np.sqrt(2) if dr != 0 and dc != 0 else 1.0
-            tentative_g_score = g_score[current] + step_cost
-
-            if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
-                came_from[neighbor] = current
-                g_score[neighbor] = tentative_g_score
-                f_score = tentative_g_score + heuristic(neighbor[0], neighbor[1])
-                heapq.heappush(open_set, (f_score, tentative_g_score, neighbor))
+                if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative_g_score
+                    f_score = tentative_g_score + heuristic(neighbor, goal)
+                    heapq.heappush(open_set, (f_score, neighbor))
 
     return []

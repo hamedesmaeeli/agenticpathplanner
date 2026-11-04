@@ -1,0 +1,65 @@
+{
+  "experiment": "exp2.2",
+  "mission": "smoothness",
+  "map_id": "cec2024_m01",
+  "difficulty": "medium",
+  "run": 1,
+  "model": "qwen2.5-coder:7b",
+  "temperature": 0.1,
+  "attempts_used": 2,
+  "selected_attempt": 2,
+  "attempt_history": [
+    {
+      "attempt": 1,
+      "compile_error": null,
+      "runtime_error": "ValueError: not enough values to unpack (expected 4, got 2)",
+      "execution_success": false,
+      "valid": false,
+      "mission_objective_optimal": false,
+      "errors": [
+        "empty_path",
+        "wrong_start",
+        "wrong_goal",
+        "out_of_bounds",
+        "obstacle_collision_or_invalid_cell",
+        "non_adjacent_waypoints"
+      ],
+      "objective": "Infinity"
+    },
+    {
+      "attempt": 2,
+      "compile_error": null,
+      "runtime_error": "ValueError: too many values to unpack (expected 2)",
+      "execution_success": false,
+      "valid": false,
+      "mission_objective_optimal": false,
+      "errors": [
+        "empty_path",
+        "wrong_start",
+        "wrong_goal",
+        "out_of_bounds",
+        "obstacle_collision_or_invalid_cell",
+        "non_adjacent_waypoints"
+      ],
+      "objective": "Infinity"
+    }
+  ],
+  "generation_time_s": 742.2966684000003,
+  "selected_generation_time_s": 435.8037820999998,
+  "planning_runtime_s": 0.00015449999955308158,
+  "prompt_tokens": 2456,
+  "completion_tokens": 1562,
+  "response_error": null,
+  "code_extracted": true,
+  "compile_success": true,
+  "plan_fn_found": true,
+  "execution_success": false,
+  "compile_error": null,
+  "runtime_error": "ValueError: too many values to unpack (expected 2)",
+  "path_returned": false,
+  "code_sha256": "20c850f1ddfc6b688877ab1948e927193684fb7a58a6babe34d068a142bfe44a",
+  "case_dir": "results\\generator\\exp2_2_pilot\\smoothness\\cec2024_m01\\run_001",
+  "validation_file": "validation.json",
+  "path_file": "path.json",
+  "attempts_dir": "attempts/"
+}
